@@ -74,4 +74,6 @@ static auto find_signature(const char* sig, const char* mask) -> ULONG64
 
     return 0;
 }
+}
+
 
