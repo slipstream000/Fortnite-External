@@ -592,4 +592,5 @@ static bool ColorPicker(float* col, bool alphabar)
 	}
 
 	return value_changed | widget_used;
+}}
 }
