@@ -2,7 +2,7 @@
 > If you want the full version of the source code you have to buy it, if you don't want to buy it you have to build it yourself.
 
 > This is not my work I just took his work to develop and sell. Because he doesn't continue :)
-## [Discord](https://discord.gg/YV9Ut3q4Yf) Join
+## [Discord New Server Link](https://discord.gg/4xVkxj4cv4)
 
 Should still be updated, doesn't take much to update it. Came to my attention it was leaked so decided to share so people can learn from it. You will need to implement your own driver.
 
