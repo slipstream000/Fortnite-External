@@ -2,7 +2,9 @@
 > If you want the full version of the source code you have to buy it, if you don't want to buy it you have to build it yourself.
 
 > This is not my work I just took his work to develop and sell. Because he doesn't continue :)
-### [Discord.gg/Sarnax](https://discord.com/invite/sarnax)
+
+
+### Sell Cheating Private / Source code Contact discord  [Discord.gg/Sarnax](https://discord.com/invite/sarnax) 
 
 Should still be updated, doesn't take much to update it. Came to my attention it was leaked so decided to share so people can learn from it. You will need to implement your own driver.
 
