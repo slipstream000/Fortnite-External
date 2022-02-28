@@ -7,6 +7,14 @@
 ### FOR SUPPORT : [Discord.gg/Sarnax](https://discord.com/invite/sarnax) 
 > #### Discord : Sarnax#9999
 
+***
+
+**Discord Support & Sell**
+> - Craete Cheating Private // Not Detected & If Banned = Refund
+> - Contact Discord to order.
+
+***
+
 Should still be updated, doesn't take much to update it. Came to my attention it was leaked so decided to share so people can learn from it. You will need to implement your own driver.
 
 
