@@ -3,17 +3,24 @@
 
 > This is not my work I just took his work to develop and sell. Because he doesn't continue :)
 
-
-### FOR SUPPORT : [Discord.gg/Sarnax](https://discord.com/invite/sarnax) 
-> #### Discord : Sarnax#9999
+  <p align="center">
+    <a href="https://discord.gg/bzfWPSsDfR">
+        <img title="Sarnax discord" alt="SarnaxLii's discord" src="https://discord.c99.nl/widget/theme-4/582142955742298132.png"/>
+    </a>
+</p>
 
 ***
+
+#### 💬 For Support : [Discord.gg/Sarnax](https://discord.com/invite/sarnax) 
+> ##### Discord : Sarnax#9999
 
 **Discord Support & Sell**
 > - Craete Cheating Private // Not Detected & If Banned = Refund
 > - Contact Discord to order.
 
 ***
+
+
 
 Should still be updated, doesn't take much to update it. Came to my attention it was leaked so decided to share so people can learn from it. You will need to implement your own driver.
 
