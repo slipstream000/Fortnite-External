@@ -17,6 +17,8 @@ If you want the full version of the source code you have to buy it, if you don't
 > - Craete Cheating Private // Spoofer and Source 
 > - Contact Discord to order.
 
+
+> -[ 💢 ] If you can't log in to the server, please add my friend because sometimes the invite link might be problematic.
 ***
 
 
