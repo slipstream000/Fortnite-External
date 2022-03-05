@@ -12,7 +12,7 @@ If you want the full version of the source code you have to buy it, if you don't
 </p>
 
 
-#### 💬 For Sell Cheating & Support  : [discord.gg/Sarnax](https://discord.com/invite/sarnax) 💢 Discord Problem wait update 💢
+#### 💬 For Sell Cheating & Support  : [discord.gg/Sarnax](https://discord.com/invite/sarnax) New Server
 > ##### Discord : Sarnax#9999
 > - Craete Cheating Private // Spoofer and Source 
 > - Contact Discord to order.
