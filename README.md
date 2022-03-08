@@ -12,13 +12,14 @@ If you want the full version of the source code you have to buy it, if you don't
 </p>
 
 
-#### 💬 Access Discord to help / support 24 Hr.  : [discord.gg/Sarnax](https://discord.com/invite/sarnax)
+#### :speech_balloon: JOIN DISCORD : [discord.gg/Sarnax](https://discord.com/invite/sarnax)
 > ##### Discord : Sarnax#9999
-> Contact to order Cheating Private that is the most secure.
-> - We give you privacy.
+> - DM for buy Cheating Private & Source ( UD + Update Lifetime )
 > - come in to be the same society as us
 
 ***
 
 
 ![096999](https://user-images.githubusercontent.com/94861415/156623966-595731c8-08e8-437c-bc3a-f8890b0053f9.png)
+
+![ffaffa](https://user-images.githubusercontent.com/94861415/157217724-8993997e-cc99-4bcb-9f6c-74fc55b45b77.png)
