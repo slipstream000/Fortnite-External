@@ -1,4 +1,4 @@
-## Fortnite External  
+#### 💬 JOIN DISCORD : Sarnax#7522 (Contact via chat to request a discord server)## Fortnite External  
 If you want the full version of the source code you have to buy it, if you don't want to buy it you have to build it yourself.
 
 > This is not my work I just took his work to develop and sell. Because he doesn't continue :)
@@ -11,7 +11,7 @@ If you want the full version of the source code you have to buy it, if you don't
 </p>
 
 
-#### 💬 JOIN DISCORD : [JOIN DISCORD ](https://discord.gg/7Z6BDGmFRc) (The new server sits from the old one disabled.)
+#### 💬 JOIN DISCORD : Sarnax#7522 (Contact via chat to request a discord server)
 > ##### Discord :Sarnax#7522
 > - DM for buy Cheating Private & Source ( UD + Update Lifetime )
 > - come in to be the same society as us
