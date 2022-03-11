@@ -12,7 +12,7 @@ If you want the full version of the source code you have to buy it, if you don't
 </p>
 
 
-#### 💬 New Server Discord : [Discord.gg/Sarnax](https://discord.gg/sFUeS3E6Sz) 
+#### 💬 Join Discord : [Discord.gg/Sarnax](https://discord.gg/sFUeS3E6Sz) (NEW SERVER)
 > - DM for buy Cheating Private & Source
 > - come in to be the same society as us
 
