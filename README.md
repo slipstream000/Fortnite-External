@@ -17,8 +17,4 @@ This is not my work I just took his work to develop and sell. Because he doesn't
 > - We do not expect profit We hope you only get good things.
 
 ***
-
-
-![096999](https://user-images.githubusercontent.com/94861415/156623966-595731c8-08e8-437c-bc3a-f8890b0053f9.png)
-
-![ffaffa](https://user-images.githubusercontent.com/94861415/157217724-8993997e-cc99-4bcb-9f6c-74fc55b45b77.png)
+![fortnite cheating](https://user-images.githubusercontent.com/94861415/158261427-6d90404c-60c9-468e-84ba-fa656480c767.jpg)
