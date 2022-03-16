@@ -12,7 +12,7 @@ This is not my work I just took his work to develop and sell. Because he doesn't
 </p>
 
 
-### 💬 Discord For Support : [HEX SUPPORT](https://discord.com/users/943374631644045363) (Add Friend For Invite Discord)
+### 💬 Discord For Support : [HEX Community](https://discord.com/users/943374631644045363) (Add Friend For Invite Discord)
 > - Contact Cheating Private / Source DM 
 > - We do not expect profit We hope you only get good things.
 
