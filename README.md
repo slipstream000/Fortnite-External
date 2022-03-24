@@ -12,7 +12,7 @@ This is not my work I just took his work to develop and sell. Because he doesn't
 </p>
 
 
-### 💬 JOIN DISCORD : [HEX SUPPORT](https://discord.gg/Q4Y6u662Fm)
+#### 💬 JOIN DISCORD / PRICES : [HEX SHOP](https://discord.gg/X6aTXz5hPG)
 > - Dm for Create Cheating Private ( Cannot detect because it is constantly being updated )
 > - We do not expect profit We hope you only get good things.
 
