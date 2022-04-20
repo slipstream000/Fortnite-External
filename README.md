@@ -1,6 +1,6 @@
 ## Fortnite External
 ```sh-session
-OPEN SOURCE :)
+OPEN SOURCE X64 RELEASE EXTERNAL
 ```
 
 ***
