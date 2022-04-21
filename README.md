@@ -22,7 +22,9 @@ OPEN SOURCE X64 RELEASE EXTERNAL
 * ` UPDATE LIFETIME & SUPPORT 24 HR `
 
 🤓・To order, please add a friend to request an invitation to the Discord server.
-
+ ```sh-session
+If you can't join the server please add me to invite discord server : Sarnax#7522
+```          
 ***
 
 ![sarnax](https://user-images.githubusercontent.com/94861415/163684351-47f7c3eb-ee2c-413c-a8c2-97d8618ca4c3.png)
