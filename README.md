@@ -16,18 +16,20 @@ OPEN SOURCE X64 RELEASE EXTERNAL
     </a>
 </p>
 
-### 📌・  JOIN DISCORD / BUY  : [HEX COMMUNITY](https://discord.gg/S2NxQRvsvn)  
+### 📌・  JOIN DISCORD / BUY  : [HEX SHOP](https://discord.gg/S2NxQRvsvn) 
 
 * `👋 SELL CHEATING PRIVATE / SPOOFER / SOURCE CODE / ETC `
-* ` UPDATE FREE LIFETIME & UD `
+* `✔️ UPDATE FREE & LIFETIME & UNDETECTED & BYPASS DRIVER , INJECTOR `
 * ` IF YOU WANT A SAFE CHEATING PRIVATE , THINK OF ME`
 * ` SAFE 100% IF BANNED = REFUND MONEY`
-* ` UPDATE LIFETIME & SUPPORT 24 HR `
+* ` WE GIVE YOU THE HIGHEST LEVEL OF SECURITY AND PRIVACY , DON'T WORRY`
+
+🌐・ **Website** : https://sarnax.xyz
 
 🐵・**We** have a backup server base and many main servers and we are **LEGIT**
+
  ```sh-session
-If you can't join the server please add me to invite discord server : Sarnax#7522
-```          
-***
+MY CHEATS , YOU CAN PLAY ON THE MAIN ACCOUT. IT WON"T GET YOU BANNED :) / DM TO BUY 
+```        
 
 ![sarnax](https://user-images.githubusercontent.com/94861415/163684351-47f7c3eb-ee2c-413c-a8c2-97d8618ca4c3.png)
