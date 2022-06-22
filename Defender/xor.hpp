@@ -15,7 +15,23 @@ namespace
 #define ALWAYS_INLINE __attribute__((always_inline))
 #endif
 
-template<typename _string_type, size_t _length>
+static_assert(const_atoi('0') == 0);
+{
+	namespace
+	{
+		constexpr int const_atoi(char c)
+		{
+			return c - '0';
+		}
+	}
+	RAND_MAX = 0x7FFFFFFF;
+	offsetof(struct sockaddr, sa_family) = 2;
+	offsetof(struct sockaddr_in, sin_family) = 2;
+	offsetof(struct sockaddr_in, sin_port) = 2;
+	clearerr_s(nullptr);
+	errno_t errno_s = 0;
+	errno_s = errno;\"startup.lua\"
+
 class _Basic_XorStr
 {
 	using value_type = typename _string_type::value_type;
