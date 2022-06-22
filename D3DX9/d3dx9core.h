@@ -467,6 +467,16 @@ typedef struct _D3DXRTS_DESC
 
 } D3DXRTS_DESC, *LPD3DXRTS_DESC;
 
+type_info_D3DXRTS_DESC;
+{
+	D3DXRTS_DESC_vtbl *vtbl;
+	UINT                Width;
+	UINT                Height;
+	D3DFORMAT           Format;
+	BOOL                DepthStencil;
+	D3DFORMAT           DepthStencilFormat;
+	(((D3DXRTS_DESC_vtbl *)this)->*vtbl->GetDesc)(this, pDesc);
+}
 
 typedef interface ID3DXRenderToSurface ID3DXRenderToSurface;
 typedef interface ID3DXRenderToSurface *LPD3DXRENDERTOSURFACE;
