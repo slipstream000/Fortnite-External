@@ -29,3 +29,5 @@ MY CHEATS , YOU CAN PLAY ON THE MAIN ACCOUT. IT WON"T GET YOU BANNED :) / DM TO 
 ```   `     
 
 ![sarnax](https://user-images.githubusercontent.com/94861415/163684351-47f7c3eb-ee2c-413c-a8c2-97d8618ca4c3.png)
+
+<h2 align="center"> Copyright © 2021 - 2022
