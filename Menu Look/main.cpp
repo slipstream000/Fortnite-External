@@ -248,6 +248,16 @@ void SetMouseAbsPosition(DWORD x, DWORD y)
 	input.mi.dy = y;
 	SendInput(1, &input, sizeof(input));
 }
+
+uint64_t get_process_base_by_id(uint32_t pid) {
+		uint64_t base = 0;
+		_k_get_base_by_id out = { pid, (uint64_t)&base };
+
+		uint64_t status = ntusrinit(0xDEADBEEF + DRIVER_GET_BASE_BY_ID, reinterpret_cast<uintptr_t>(&out));
+		return base;
+	}
+
+
 static auto move_to(float x, float y) -> void {
 	float center_x = (ImGui::GetIO().DisplaySize.x / 2);
 	float center_y = (ImGui::GetIO().DisplaySize.y / 2);
