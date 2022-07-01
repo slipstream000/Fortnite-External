@@ -1,5 +1,49 @@
 #pragma once
 #include "../Defines/utils.h"
+
+ool C_Engine::WorldToScreen(const Vector& origin, Vector2D& screen)
+{
+	g_pCamera = GetCamera();
+	if (!g_pCamera)
+		return false;
+
+	Vector temp = origin - g_pCamera->GetViewTranslation();
+	float x = temp.Dot(g_pCamera->GetViewRight());
+	float y = temp.Dot(g_pCamera->GetViewUp());
+	float z = temp.Dot(g_pCamera->GetViewForward() * -1);
+	screen.x = (Globals::g_iWindowWidth / 2) * (1 + x / g_pCamera->GetViewFovX() / z);
+	screen.y = (Globals::g_iWindowHeight / 2) * (1 - y / g_pCamera->GetViewFovY() / z);
+
+	return z >= 1.0f;
+}
+
+float C_Engine::W2SDistance(Vector position)
+{
+	if (!g_pCamera)
+		return -1;
+
+	Vector2D out;
+	WorldToScreen(position, out);
+	return (fabs(out.x - (Globals::g_iWindowWidth / 2)) + fabs(out.y - (Globals::g_iWindowHeight / 2)));
+}
+
+Vector C_Engine::CalcAngle(Vector enemypos, Vector camerapos)
+{
+	float r2d = 57.2957795131f;
+
+	Vector dir = enemypos - camerapos;
+
+	float x = asin(dir.z / dir.Length()) * r2d;
+	float z = atan(dir.y / dir.x) * r2d;
+
+	if (dir.x >= 0.f) z += 180.f;
+	if (x > 180.0f) x -= 360.f;
+	else if (x < -180.0f) x += 360.f;
+
+	return Vector(x, 0.f, z + 90.f);
+}
+
+
 std::mutex isuse;
 
 
