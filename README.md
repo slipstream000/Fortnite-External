@@ -11,22 +11,23 @@ EXTERNAL / YOU NEED YOUR OWN DRIVER FOR IT TO WORK. IF YOU DON'T WANT TO CREATE 
 </p>
 
 
-### ・💬 DISCORD JOIN : [HEX COMMUNITY](https://discord.gg/7vVb9g7FGT) 
+***
+ 
+###  <p align="center"> 💬・ DISCORD : [HEX COMMUNITY](https://discord.gg/7vVb9g7FGT) 
 
 
-* `👋 SELL CHEATING PRIVATE / SPOOFER / SOURCE CODE / ETC `
-* `✔️ UPDATE FREE & LIFETIME & UNDETECTED & BYPASS DRIVER , INJECTOR `
-* ` IF YOU WANT A SAFE CHEATING PRIVATE , THINK OF ME`
-* ` SAFE 100% IF BANNED = REFUND MONEY`
-* ` WE GIVE YOU THE HIGHEST LEVEL OF SECURITY AND PRIVACY , DON'T WORRY`
+* `👋 : CHEATING PRIVATE // SPOOFER // SOURCE CODE // ETC `
+* ` : UPDATE FREE & LIFETIME & UNDETECTED & BYPASS DRIVER , INJECTOR `
+* ` ✔️ : SAFE 100% IF BANNED = REFUND MONEY`
+* ` : WE GIVE YOU THE HIGHEST LEVEL OF SECURITY AND PRIVACY , DON'T WORRY`
 
-🌐・ **Website** : https://sarnax.xyz
-
-🐵・**We** have a backup server base and many main servers and we are **LEGIT**
+📝 **WEBSITE** ・[SARNAX.COM](https://sarnax.xyz)
 
  ```sh-session
-MY CHEATS , YOU CAN PLAY ON THE MAIN ACCOUT. IT WON"T GET YOU BANNED :) / DM TO BUY 
-```
+・ YOU CAN PLAY ON THE MAIN ACCOUT. IT WON"T GET YOU BANNED :) / JOIN DISCORD FOR BUY ・
+```                
+
+***
 
 ![sarnax](https://user-images.githubusercontent.com/94861415/163684351-47f7c3eb-ee2c-413c-a8c2-97d8618ca4c3.png)
 
