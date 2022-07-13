@@ -58,6 +58,11 @@ public:
 		return _string_type(data, data + _length_minus_one);
 	}
 
+		}
+
+	inline auto remove() const
+	{
+		
 	inline operator _string_type() const
 	{
 		return str();
