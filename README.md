@@ -3,6 +3,9 @@
 EXTERNAL / YOU NEED YOUR OWN DRIVER FOR IT TO WORK. IF YOU DON'T WANT TO CREATE THE DRIVER YOUSELF, YOU CAN ORDER IT FROM ME
 ```
 
+・ Source Shows work to make sure I'm legit and you can trust it. You can contact discord to place an order.
+
+
 ***
   <p align="center">
     <a href="https://discord.com/users/943374631644045363">
