@@ -3,8 +3,11 @@
 EXTERNAL / YOU NEED YOUR OWN DRIVER FOR IT TO WORK. IF YOU DON'T WANT TO CREATE THE DRIVER YOUSELF, YOU CAN ORDER IT FROM ME
 ```
 
-・ Source Shows work to make sure I'm legit and you can trust it. You can contact discord to place an order.
+- Source code for further development of Fortnite / just show me my work
 
+- You just create Driver Kernel and paste it into main.cpp and it will run.
+
+- There will be constant updates about Offset. You can see the updates in the file.
 
 ***
   <p align="center">
