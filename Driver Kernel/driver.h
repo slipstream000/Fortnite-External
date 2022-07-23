@@ -312,11 +312,50 @@ std::string readwtf(uintptr_t Address, void* Buffer, SIZE_T Size)
 	memcpy(&name, Buffer, Size);
 
 	return std::string(name);
-}
-uint64_t ReadChain(uint64_t base, const std::vector<uint64_t>& offsets) {
-	uint64_t result = read<uint64_t>(base + offsets.at(0));
-	for (int i = 1; i < offsets.size(); i++) {
-		result = read<uint64_t>(result + offsets.at(i));
+CapcomDriverManualMapper::CapcomDriverManualMapper(const char* ProxyDriverName, const char* DriverName, DWORD64 BaseAddress)
+	:pFileBuffer(NULL), BaseAddress(BaseAddress)
+{
+	assert(BaseAddress);
+
+	ifstream driverFile(DriverName, ios::binary | ios::in);
+	driverFile.seekg(0, ios::end);
+
+	const auto fileSize = driverFile.tellg();
+	driverFile.seekg(0, ios::beg);
+
+	pFileBuffer = new BYTE[fileSize];
+
+	driverFile.read((char*)pFileBuffer, fileSize);
+
+	PIMAGE_DOS_HEADER pDosHeader = (PIMAGE_DOS_HEADER)pFileBuffer;
+	PIMAGE_NT_HEADERS pNtHeader = (PIMAGE_NT_HEADERS)(pDosHeader->e_lfanew + (DWORD64)pFileBuffer);
+	SizeOfImage = pNtHeader->OptionalHeader.SizeOfImage;
+	SizeOfFile = fileSize;
+
+	pMappedImage = new BYTE[SizeOfImage];
+	ZeroMemory(pMappedImage, SizeOfImage);
+
+	if (!VirtualLock(pMappedImage, SizeOfImage))
+	{
+		throw exception("Locking image buffer failed");
 	}
-	return result;
+
+	Controller = Mc_InitContext(&CpCtx, &KrCtx);
+
+	if (Controller.CreationStatus)
+		throw exception("Controller Raised A Creation Status");
+
+	std::string string_proxy_driver_name = ProxyDriverName;
+	auto dot = string_proxy_driver_name.find('.');
+
+	std::wstring wide_string_proxy_driver_name(string_proxy_driver_name.begin(), string_proxy_driver_name.begin() + dot);
+
+	mProxyDriverName = new wchar_t[wide_string_proxy_driver_name.length() + 1];
+
+	memcpy(mProxyDriverName, wide_string_proxy_driver_name.c_str(), (wide_string_proxy_driver_name.length() + 1) * sizeof(WCHAR));
+
+	if (!VirtualLock(mProxyDriverName, (wide_string_proxy_driver_name.length() + 1) * sizeof(WCHAR)))
+	{
+		throw exception("Locking proxy driver name buffer failed");
+	}
 }
