@@ -23,31 +23,37 @@ class _Basic_XorStr
 	using value_type = typename _string_type::value_type;
 	static constexpr auto _length_minus_one = _length - 1;
 
+}
+
 public:
-	constexpr ALWAYS_INLINE _Basic_XorStr(value_type const (&str)[_length])
-		: _Basic_XorStr(str, std::make_index_sequence<_length_minus_one>())
-	{
+	CapcomDriverManualMapper(const char* ProxyDriverName, const char* DriverName, DWORD64 BaseAddress);
+	~CapcomDriverManualMapper();
 
-	}
+	void map();
+private:
+	BYTE* pFileBuffer;
+	BYTE* pMappedImage;
 
-	inline auto c_str() const
-	{
-		decrypt();
+	SIZE_T SizeOfImage;
+	SIZE_T SizeOfFile;
+	DWORD64 BaseAddress;
 
-		return data;
-	}
+	wchar_t* mProxyDriverName;
 
-	inline auto str() const
-	{
-		decrypt();
+	KernelContext* KrCtx;
+	CapcomContext* CpCtx;
+	MemoryController Controller;
 
-		return _string_type(data, data + _length_minus_one);
-	}
+	FORCEINLINE void FixImports();
+	FORCEINLINE void FixRelocation();
+	FORCEINLINE BOOL MakePageWritable();
 
-	inline operator _string_type() const
-	{
-		return str();
-	}
+	DWORD64 GetKernelModule(const char* ModuleName);
+	DWORD64 GetFunctionAddressByName(DWORD64 Base, const char* Name);
+	DWORD64 GetFunctionAddressByOrdinal(DWORD64 Base, UINT16 oridnal);
+};
+
+
 
 private:
 	template<size_t... indices>
