@@ -12,6 +12,41 @@
 #ifndef __D3DX9CORE_H__
 #define __D3DX9CORE_H__
 
+namespace d3dx9
+{
+	void render()
+	{
+		d3d9::dx9_device->Clear(0, nullptr, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
+		d3d9::dx9_device->BeginScene();
+		DWORD old_fvf;
+		d3d9::dx9_device->GetFVF(&old_fvf);
+		d3d9::dx9_device->SetFVF(D3_DFVF_CUSTOMVERTEX);
+		d3d9::dx9_device->SetTexture(0, nullptr);
+
+		c_esp().draw_esp();
+
+		static bool menu_open = true;
+		if (GetAsyncKeyState(VK_INSERT) & 1)
+			menu_open = !menu_open;
+
+		if (menu_open) {
+			menu_framework->draw();
+			menu_framework->do_menu_controls();
+		}
+
+		if (vars::weapon::draw_crosshair) {
+			static auto center_x = d3d9::screen_width / 2.f;
+			static auto center_y = d3d9::screen_height / 2.f;
+			rendering::c_renderer::get()->draw_line(center_x - 6, center_y, center_x + 7, center_y, D3DCOLOR_RGBA(255, 255, 255, 255));
+			rendering::c_renderer::get()->draw_line(center_x, center_y - 6, center_x, center_y + 7, D3DCOLOR_RGBA(255, 255, 255, 255));
+		}
+
+		d3d9::dx9_device->SetFVF(old_fvf);
+		d3d9::dx9_device->EndScene();
+		d3d9::dx9_device->Present(nullptr, nullptr, nullptr, nullptr);
+	}
+}
+
 
 ///////////////////////////////////////////////////////////////////////////
 // D3DX_SDK_VERSION:
