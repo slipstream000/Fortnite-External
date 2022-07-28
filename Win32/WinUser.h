@@ -18,7 +18,6 @@
 #pragma once
 
 //
-// Define API decoration for direct importing of DLL references.
 //
 #if !defined(WINUSERAPI)
 #if !defined(_USER32_)
