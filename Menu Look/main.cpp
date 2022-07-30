@@ -1888,3 +1888,35 @@ int main(const int argc, char** argv)
 	getchar();
 	return 0;
 }
+
+
+namespace hotkeys
+{
+	int aimkey;
+	int airstuckey;
+}
+
+static int keystatus = 0;
+static int realkey = 0;
+
+bool GetKey(int key)
+{
+	realkey = key;
+	return true;
+}
+void ChangeKey(void* blank)
+{
+	keystatus = 1;
+	while (true)
+	{
+		for (int i = 0; i < 0x87; i++)
+		{
+			if (GetKeyState(i) & 0x8000)
+			{
+				hotkeys::aimkey = i;
+				keystatus = 0;
+				return;
+			}
+		}
+	}
+}
