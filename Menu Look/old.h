@@ -1,3 +1,33 @@
+namespace jm {
+
+    namespace detail {
+
+        template<std::size_t S>
+        struct unsigned_;
+
+        template<>
+        struct unsigned_<1> {
+            using type = std::uint8_t;
+        };
+        template<>
+        struct unsigned_<2> {
+            using type = std::uint16_t;
+        };
+        template<>
+        struct unsigned_<4> {
+            using type = std::uint32_t;
+        };
+
+        template<auto C, auto...>
+        struct pack_value_type {
+            using type = decltype(C);
+        };
+
+        template<std::size_t Size>
+        constexpr std::size_t _buffer_size() {
+            return ((Size / 16) + (Size % 16 != 0)) * 2;
+        }	
+
 	//if (menu_key)
 	//{
 
