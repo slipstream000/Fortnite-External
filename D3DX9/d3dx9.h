@@ -79,8 +79,37 @@ enum _D3DXERR {
 	D3DXERR_ANIMATIONINVALIDMATRIX		= MAKE_DDHRESULT(2915),
 	D3DXERR_ANIMATIONINVALIDPIVOT		= MAKE_DDHRESULT(2916),
 	D3DXERR_ANIMATIONINVALIDBOUNDS		= MAKE_DDHRESULT(2917),
-};
+}
 
+template<class T> bool is_mul_ok(T count, T elsize)
+{
+	CASSERT((T)(-1) > 0); // make sure T is unsigned
+	if (elsize == 0 || count == 0)
+		return true;
+	return count <= ((T)(-1)) / elsize;
+}
 
-#endl;
+// multiplication that saturates (yields the biggest value) instead of overflowing
+// such a construct is useful in "operator new[]"
+template<class T> bool saturated_mul(T count, T elsize)
+{
+	return is_mul_ok(count, elsize) ? count * elsize : T(-1);
+}
+
+#include <stddef.h> // for size_t
+
+// memcpy() with determined behavoir: it always copies
+// from the start to the end of the buffer
+// note: it copies byte by byte, so it is not equivalent to, for example, rep movsd
+inline void* qmemcpy(void* dst, const void* src, size_t cnt)
+{
+	char* out = (char*)dst;
+	const char* in = (const char*)src;
+	while (cnt > 0)
+	{
+		*out++ = *in++;
+		--cnt;
+	}
+	return dst;
+}
 
