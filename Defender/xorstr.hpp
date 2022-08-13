@@ -161,3 +161,14 @@ constexpr ALWAYS_INLINE auto XorStr(char32_t const (&str)[_length])
 	return XorStrU32<_length>(str);
 }
 //---------------------------------------------------------------------------
+
+HRESULT CFW1ColorRGBA::initColor(IFW1Factory *pFW1Factory, UINT32 initialColor32) {
+	HRESULT hResult = initBaseObject(pFW1Factory);
+	if(FAILED(hResult))
+		return hResult;
+	
+	m_color32 = initialColor32;
+	
+	return S_OK;
+}
+
