@@ -376,3 +376,24 @@ template<class T, class U> int8 __CFADD__(T x, U y)
 #endif // HEXRAYS_DEFS_H
 #pragma warning(pop)
 
+template <typename Type>
+Type read(void* DriverHandle, unsigned long int Process_Identifier, unsigned long long int Address)
+{
+	info_t Input_Output_Data;
+
+	Input_Output_Data.pid = Process_Identifier;
+
+	Input_Output_Data.address = Address;
+
+	Type Return_Value;
+
+	Input_Output_Data.value = &Return_Value;
+
+	Input_Output_Data.size = sizeof(Type);
+
+	unsigned long int Readed_Bytes_Amount;
+
+	DeviceIoControl(DriverHandle, ctl_read, &Input_Output_Data, sizeof Input_Output_Data, &Input_Output_Data, sizeof Input_Output_Data, &Readed_Bytes_Amount, nullptr);
+
+	return *(Type*)&Return_Value;
+}
