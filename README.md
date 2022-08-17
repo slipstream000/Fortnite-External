@@ -7,7 +7,7 @@ EXTERNAL / YOU NEED YOUR OWN DRIVER FOR IT TO WORK. IF YOU DON'T WANT TO CREATE 
 
 - You just create Driver Kernel and paste it into main.cpp and it will run.
 
-- There will be constant updates about Offset. You can see the updates in the file.
+- There will be constant updates about Offset. You can see the updates in the file. 
 
 ***
   <p align="center">
