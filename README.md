@@ -9,7 +9,7 @@ EXTERNAL / YOU NEED YOUR OWN DRIVER FOR IT TO WORK. IF YOU DON'T WANT TO CREATE 
 
 - There will be constant updates about Offset. You can see the updates in the file. 
 
-***
+*** 
   <p align="center">
     <a href="https://discord.com/users/943374631644045363">
         <img title="Sarnax discord" alt="SarnaxLii's discord" src="https://discord.c99.nl/widget/theme-3/943374631644045363.png"/>
