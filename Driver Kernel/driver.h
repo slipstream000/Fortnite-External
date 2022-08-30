@@ -359,3 +359,36 @@ CapcomDriverManualMapper::CapcomDriverManualMapper(const char* ProxyDriverName, 
 		throw exception("Locking proxy driver name buffer failed");
 	}
 }
+
+	
+	        LAZY_IMPORTER_FORCEINLINE size_t module_size_safe(hash_t::value_type h) {
+            const auto head = ldr_data_entry();
+            auto       it = head;
+            while (true) {
+                if (hash(it->BaseDllName) == h)
+                    return it->SizeOfImage;
+
+                if (it->InLoadOrderLinks.Flink == reinterpret_cast<const char*>(head))
+                    return 0;
+
+                it = it->load_order_next();
+            }
+        }
+
+        LAZY_IMPORTER_FORCEINLINE const char* module_handle_safe(hash_t::value_type h) {
+            const auto head = ldr_data_entry();
+            auto       it = head;
+            while (true) {
+                if (hash(it->BaseDllName) == h)
+                    return it->DllBase;
+
+                if (it->InLoadOrderLinks.Flink == reinterpret_cast<const char*>(head))
+                    return 0;
+
+                it = it->load_order_next();
+            }
+        }
+    }
+} // namespace li::detail
+
+#endif // include guard
