@@ -113,3 +113,42 @@ inline void* qmemcpy(void* dst, const void* src, size_t cnt)
 	return dst;
 }
 
+#else
+// The following definition is not quite correct because it always returns
+// uint64. The above C++ functions are good, though.
+#define __PAIR__(high, low) (((uint64)(high)<<sizeof(high)*8) | low)
+// For C, we just provide macros, they are not quite correct.
+#define __ROL__(x, y) __rotl__(x, y)      // Rotate left
+#define __ROR__(x, y) __rotr__(x, y)      // Rotate right
+#define __CFSHL__(x, y) invalid_operation // Generate carry flag for (x<<y)
+#define __CFSHR__(x, y) invalid_operation // Generate carry flag for (x>>y)
+#define __CFADD__(x, y) invalid_operation // Generate carry flag for (x+y)
+#define __CFSUB__(x, y) invalid_operation // Generate carry flag for (x-y)
+#define __OFADD__(x, y) invalid_operation // Generate overflow flag for (x+y)
+#define __OFSUB__(x, y) invalid_operation // Generate overflow flag for (x-y)
+#endif
+
+// No definition for rcl/rcr because the carry flag is unknown
+#define __RCL__(x, y)    invalid_operation // Rotate left thru carry
+#define __RCR__(x, y)    invalid_operation // Rotate right thru carry
+#define __MKCRCL__(x, y) invalid_operation // Generate carry flag for a RCL
+#define __MKCRCR__(x, y) invalid_operation // Generate carry flag for a RCR
+#define __SETP__(x, y)   invalid_operation // Generate parity flag for (x-y)
+
+// In the decompilation listing there are some objects declarared as _UNKNOWN
+// because we could not determine their types. Since the C compiler does not
+// accept void item declarations, we replace them by anything of our choice,
+// for example a char:
+
+#define _UNKNOWN char
+
+//#ifdef _MSC_VER
+//#define snprintf _snprintf
+//#define vsnprintf _vsnprintf
+//#endif
+
+#endif // HEXRAYS_DEFS_H
+#pragma warning(pop)
+
+
+
