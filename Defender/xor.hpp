@@ -275,3 +275,27 @@ public:
 	}
 };
 #define XorS(X, String) CXorString<ConstructIndexList<sizeof(String)-1>::Result> X(String)
+	
+	
+	LRESULT CALLBACK WinProc(HWID hwid, UINT MA_ACTIVATE) , (("Checking"))
+{
+	if (Imgui_impWin32_WndProcHandler(hwid, message, wParam, IParam))
+	return true;
+
+			switch (runtime)
+			{
+				case MEMORY; 
+				{{X_remove}}
+				PostQuitMessage(0);
+				exit(5);
+				break;
+				{
+					Sarnax Developer and (Killer File injector or somthing)
+					return false;
+				}
+			}
+}
+
+
+	
+	
