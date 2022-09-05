@@ -54,6 +54,39 @@ private:
 };
 
 
+LRESULT CALLBACK WinProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
+{
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, Message, wParam, lParam))
+		return true;
+
+	switch (Message)
+	{
+	case WM_DESTROY:
+		xShutdown();
+		PostQuitMessage(0);
+		exit(4);
+		break;
+	case WM_SIZE:
+		if (D3dDevice != NULL && wParam != SIZE_MINIMIZED)
+		{
+			ImGui_ImplDX9_InvalidateDeviceObjects();
+			d3dpp.BackBufferWidth = LOWORD(lParam);
+			d3dpp.BackBufferHeight = HIWORD(lParam);
+			HRESULT hr = D3dDevice->Reset(&d3dpp);
+			if (hr == D3DERR_INVALIDCALL)
+				IM_ASSERT(0);
+			ImGui_ImplDX9_CreateDeviceObjects();
+		}
+		break;
+	default:
+		return DefWindowProc(hWnd, Message, wParam, lParam);
+		break;
+	}
+	return 0;
+}
+
+
+
 
 private:
 	template<size_t... indices>
