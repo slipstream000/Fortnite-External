@@ -20,7 +20,7 @@ EXTERNAL / YOU NEED YOUR OWN DRIVER FOR IT TO WORK. IF YOU DON'T WANT TO CREATE 
  
 ***
  
-### 💬 DISCORD ・ [HEX PROJECT](https://discord.gg/MBTkVcJefp) 
+### 💬 DISCORD ・ [CLOUD | PROJECT](https://discord.gg/MBTkVcJefp) 
 
 
 * ` 🛒: Product :  Cheating Private | Spoofer | Source code | Driver `
@@ -32,7 +32,7 @@ EXTERNAL / YOU NEED YOUR OWN DRIVER FOR IT TO WORK. IF YOU DON'T WANT TO CREATE 
 
 - Additional questions For the Product [Announcement](https://github.com/SarnaxLii/Announcement)
 
-#### 📝 WEBSITE [SARNAX.COM](https://sarnax.xyz)
+#### 📝 WEBSITE [Fnoberz.COM](https://sarnax.xyz)
 
  ```sh-session
 ・ OUR CHEATING PRIVATE CAN PLAY MAIN ACCOUNT WITHOUT GETTING BANNED / JOIN DISCORD : Sarnax#7522・ 
