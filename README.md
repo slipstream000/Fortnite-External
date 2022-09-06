@@ -12,7 +12,7 @@ EXTERNAL / YOU NEED YOUR OWN DRIVER FOR IT TO WORK. IF YOU DON'T WANT TO CREATE 
 *** 
   <p align="center">
     <a href="https://discord.com/users/943374631644045363">
-        <img title="Sarnax discord" alt="SarnaxLii's discord" src="https://discord.c99.nl/widget/theme-3/943374631644045363.png"/>
+        <img title="Fnoberz discord" alt="Fnoberz's discord" src="https://discord.c99.nl/widget/theme-3/943374631644045363.png"/>
     </a>
 </p> 
 
@@ -32,7 +32,7 @@ EXTERNAL / YOU NEED YOUR OWN DRIVER FOR IT TO WORK. IF YOU DON'T WANT TO CREATE 
 
 - Additional questions For the Product [Announcement](https://github.com/SarnaxLii/Announcement)
 
-#### 📝 WEBSITE [Fnoberz.COM](https://sarnax.xyz)
+#### 📝 WEBSITE [FNOBERZ.COM](https://sarnax.xyz)
 
  ```sh-session
 ・ OUR CHEATING PRIVATE CAN PLAY MAIN ACCOUNT WITHOUT GETTING BANNED / JOIN DISCORD : Sarnax#7522・ 
