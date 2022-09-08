@@ -82,3 +82,76 @@ ImFont* otherfont;
 ImFont* tabfont;
 ImFont* othertitle;
 ImFont* spritefont;
+
+void xMainLoop()
+{
+	static RECT old_rc;
+	ZeroMemory(&Message, sizeof(MSG));
+
+	while (Message.message != WM_QUIT)
+	{
+		if (PeekMessage(&Message, Window, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&Message);
+			DispatchMessage(&Message);
+		}
+
+		HWND hwnd_active = GetForegroundWindow();
+
+		if (hwnd_active == hwnd) {
+			HWND hwndtest = GetWindow(hwnd_active, GW_HWNDPREV);
+			SetWindowPos(Window, hwndtest, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		}
+
+		if (GetAsyncKeyState(0x23) & 1)
+			exit(8);
+
+		RECT rc;
+		POINT xy;
+
+		ZeroMemory(&rc, sizeof(RECT));
+		ZeroMemory(&xy, sizeof(POINT));
+		GetClientRect(hwnd, &rc);
+		ClientToScreen(hwnd, &xy);
+		rc.left = xy.x;
+		rc.top = xy.y;
+
+		ImGuiIO& io = ImGui::GetIO();
+		io.ImeWindowHandle = hwnd;
+		io.DeltaTime = 1.0f / 60.0f;
+
+		POINT p;
+		GetCursorPos(&p);
+		io.MousePos.x = p.x - xy.x;
+		io.MousePos.y = p.y - xy.y;
+
+		if (GetAsyncKeyState(VK_LBUTTON)) {
+			io.MouseDown[0] = true;
+			io.MouseClicked[0] = true;
+			io.MouseClickedPos[0].x = io.MousePos.x;
+			io.MouseClickedPos[0].x = io.MousePos.y;
+		}
+		else
+			io.MouseDown[0] = false;
+
+		if (rc.left != old_rc.left || rc.right != old_rc.right || rc.top != old_rc.top || rc.bottom != old_rc.bottom)
+		{
+			old_rc = rc;
+
+			Width = rc.right;
+			Height = rc.bottom;
+
+			d3dpp.BackBufferWidth = Width;
+			d3dpp.BackBufferHeight = Height;
+			SetWindowPos(Window, (HWND)0, xy.x, xy.y, Width, Height, SWP_NOREDRAW);
+			D3dDevice->Reset(&d3dpp);
+		}
+		render();
+	}
+	ImGui_ImplDX9_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+
+	DestroyWindow(Window);
+}
+
