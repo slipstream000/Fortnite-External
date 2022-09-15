@@ -526,70 +526,7 @@ void DrawRightProgressBar(int x, int y, int w, int h, int thick, int m_health)
 
 	DrawFilledRect(x + (w / 2) - 25, y, thick, (h)*m_health / 100, &healthcol);
 }
-void DrawString(float fontSize, int x, int y, RGBA* color, bool bCenter, bool stroke, const char* pText, ...)
-{
-	va_list va_alist;
-	char buf[1024] = { 0 };
-	va_start(va_alist, pText);
-	_vsnprintf_s(buf, sizeof(buf), pText, va_alist);
-	va_end(va_alist);
-	std::string text = WStringToUTF8(MBytesToWString(buf).c_str());
-	if (bCenter)
-	{
-		ImVec2 textSize = ImGui::CalcTextSize(text.c_str());
-		x = x - textSize.x / 2;
-		y = y - textSize.y;
-	}
-	if (stroke)
-	{
-		ImGui::GetOverlayDrawList()->AddText(ImGui::GetFont(), fontSize, ImVec2(x + 1, y + 1), ImGui::ColorConvertFloat4ToU32(ImVec4(0, 0, 0, 1)), text.c_str());
-		ImGui::GetOverlayDrawList()->AddText(ImGui::GetFont(), fontSize, ImVec2(x - 1, y - 1), ImGui::ColorConvertFloat4ToU32(ImVec4(0, 0, 0, 1)), text.c_str());
-		ImGui::GetOverlayDrawList()->AddText(ImGui::GetFont(), fontSize, ImVec2(x + 1, y - 1), ImGui::ColorConvertFloat4ToU32(ImVec4(0, 0, 0, 1)), text.c_str());
-		ImGui::GetOverlayDrawList()->AddText(ImGui::GetFont(), fontSize, ImVec2(x - 1, y + 1), ImGui::ColorConvertFloat4ToU32(ImVec4(0, 0, 0, 1)), text.c_str());
-	}
-	ImGui::GetOverlayDrawList()->AddText(ImGui::GetFont(), fontSize, ImVec2(x, y), ImGui::ColorConvertFloat4ToU32(ImVec4(color->R / 255.0, color->G / 255.0, color->B / 255.0, color->A / 255.0)), text.c_str());
-}
-void DrawCircleFilled(int x, int y, int radius, RGBA* color)
-{
-	ImGui::GetOverlayDrawList()->AddCircleFilled(ImVec2(x, y), radius, ImGui::ColorConvertFloat4ToU32(ImVec4(color->R / 255.0, color->G / 255.0, color->B / 255.0, color->A / 255.0)));
-}
-void DrawCircle(int x, int y, int radius, RGBA* color, int segments)
-{
-	ImGui::GetOverlayDrawList()->AddCircle(ImVec2(x, y), radius, ImGui::ColorConvertFloat4ToU32(ImVec4(color->R / 255.0, color->G / 255.0, color->B / 255.0, color->A / 255.0)), segments);
-}
-void DrawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, RGBA* color, float thickne)
-{
-	ImGui::GetOverlayDrawList()->AddTriangle(ImVec2(x1, y1), ImVec2(x2, y2), ImVec2(x3, y3), ImGui::ColorConvertFloat4ToU32(ImVec4(color->R / 255.0, color->G / 255.0, color->B / 255.0, color->A / 255.0)), thickne);
-}
-void DrawTriangleFilled(int x1, int y1, int x2, int y2, int x3, int y3, RGBA* color)
-{
-	ImGui::GetOverlayDrawList()->AddTriangleFilled(ImVec2(x1, y1), ImVec2(x2, y2), ImVec2(x3, y3), ImGui::ColorConvertFloat4ToU32(ImVec4(color->R / 255.0, color->G / 255.0, color->B / 255.0, color->A / 255.0)));
-}
-void DrawLine(int x1, int y1, int x2, int y2, RGBA* color, int thickness)
-{
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(x1, y1), ImVec2(x2, y2), ImGui::ColorConvertFloat4ToU32(ImVec4(color->R / 255.0, color->G / 255.0, color->B / 255.0, color->A / 255.0)), thickness);
-}
-void DrawCornerBox(int x, int y, int w, int h, int borderPx, RGBA* color)
-{
-	DrawFilledRect(x + borderPx, y, w / 3, borderPx, color); //top 
-	DrawFilledRect(x + w - w / 3 + borderPx, y, w / 3, borderPx, color); //top 
-	DrawFilledRect(x, y, borderPx, h / 3, color); //left 
-	DrawFilledRect(x, y + h - h / 3 + borderPx * 2, borderPx, h / 3, color); //left 
-	DrawFilledRect(x + borderPx, y + h + borderPx, w / 3, borderPx, color); //bottom 
-	DrawFilledRect(x + w - w / 3 + borderPx, y + h + borderPx, w / 3, borderPx, color); //bottom 
-	DrawFilledRect(x + w + borderPx, y, borderPx, h / 3, color);//right 
-	DrawFilledRect(x + w + borderPx, y + h - h / 3 + borderPx * 2, borderPx, h / 3, color);//right 
-}
-void DrawNormalBox(int x, int y, int w, int h, int borderPx, RGBA* color)
-{
-	DrawFilledRect(x + borderPx, y, w, borderPx, color); //top 
-	DrawFilledRect(x + w - w + borderPx, y, w, borderPx, color); //top 
-	DrawFilledRect(x, y, borderPx, h, color); //left 
-	DrawFilledRect(x, y + h - h + borderPx * 2, borderPx, h, color); //left 
-	DrawFilledRect(x + borderPx, y + h + borderPx, w, borderPx, color); //bottom 
-	DrawFilledRect(x + w - w + borderPx, y + h + borderPx, w, borderPx, color); //bottom 
-	DrawFilledRect(x + w + borderPx, y, borderPx, h, color);//right 
-	DrawFilledRect(x + w + borderPx, y + h - h + borderPx * 2, borderPx, h, color);//right 
+
 }
 void DrawLine2(const ImVec2& from, const ImVec2& to, uint32_t color, float thickness)
 {
@@ -634,7 +571,7 @@ std::string GetNameFromFName(int key)
 	uint16_t nameEntry = read<uint16_t>(entryOffset);
 
 	int nameLength = nameEntry >> 6;
-	char buff[1028];
+	char buff[1028x1349];
 
 	char* v2 = buff; // rdi
 	unsigned __int16* v3; // rbx
@@ -680,7 +617,7 @@ std::string GetNameFromFName(int key)
 }
 void cache()
 {
-	while (true) {
+	while (false) {
 		std::vector<FNlEntity> tmpList;
 
 		Uworld = read<DWORD_PTR>(sdk::module_base + 0xB613240);
@@ -802,52 +739,6 @@ void AimAt2(DWORD_PTR entity) {
 	}
 }
 
-void DrawSkeleton(DWORD_PTR mesh)
-{
-	Vector3 vHeadBone = GetBoneWithRotation(mesh, 98);
-	Vector3 vHip = GetBoneWithRotation(mesh, 2);
-	Vector3 vNeck = GetBoneWithRotation(mesh, 66);
-	Vector3 vUpperArmLeft = GetBoneWithRotation(mesh, 93);
-	Vector3 vUpperArmRight = GetBoneWithRotation(mesh, 9);
-	Vector3 vLeftHand = GetBoneWithRotation(mesh, 62);
-	Vector3 vRightHand = GetBoneWithRotation(mesh, 33);
-	Vector3 vLeftHand1 = GetBoneWithRotation(mesh, 100);
-	Vector3 vRightHand1 = GetBoneWithRotation(mesh, 99);
-	Vector3 vRightThigh = GetBoneWithRotation(mesh, 69);
-	Vector3 vLeftThigh = GetBoneWithRotation(mesh, 76);
-	Vector3 vRightCalf = GetBoneWithRotation(mesh, 72);
-	Vector3 vLeftCalf = GetBoneWithRotation(mesh, 79);
-	Vector3 vLeftFoot = GetBoneWithRotation(mesh, 85);
-	Vector3 vRightFoot = GetBoneWithRotation(mesh, 84);
-	Vector3 vHeadBoneOut = ProjectWorldToScreen(vHeadBone);
-	Vector3 vHipOut = ProjectWorldToScreen(vHip);
-	Vector3 vNeckOut = ProjectWorldToScreen(vNeck);
-	Vector3 vUpperArmLeftOut = ProjectWorldToScreen(vUpperArmLeft);
-	Vector3 vUpperArmRightOut = ProjectWorldToScreen(vUpperArmRight);
-	Vector3 vLeftHandOut = ProjectWorldToScreen(vLeftHand);
-	Vector3 vRightHandOut = ProjectWorldToScreen(vRightHand);
-	Vector3 vLeftHandOut1 = ProjectWorldToScreen(vLeftHand1);
-	Vector3 vRightHandOut1 = ProjectWorldToScreen(vRightHand1);
-	Vector3 vRightThighOut = ProjectWorldToScreen(vRightThigh);
-	Vector3 vLeftThighOut = ProjectWorldToScreen(vLeftThigh);
-	Vector3 vRightCalfOut = ProjectWorldToScreen(vRightCalf);
-	Vector3 vLeftCalfOut = ProjectWorldToScreen(vLeftCalf);
-	Vector3 vLeftFootOut = ProjectWorldToScreen(vLeftFoot);
-	Vector3 vRightFootOut = ProjectWorldToScreen(vRightFoot);
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(vHipOut.x, vHipOut.y), ImVec2(vNeckOut.x, vNeckOut.y), ImColor(255, 0, 255, 255), 2.0f );
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(vUpperArmLeftOut.x, vUpperArmLeftOut.y), ImVec2(vNeckOut.x, vNeckOut.y), ImColor(255, 0, 255, 255), 2.0f);
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(vUpperArmRightOut.x, vUpperArmRightOut.y), ImVec2(vNeckOut.x, vNeckOut.y), ImColor(255, 0, 255, 255), 2.0f);
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(vLeftHandOut.x, vLeftHandOut.y), ImVec2(vUpperArmLeftOut.x, vUpperArmLeftOut.y), ImColor(255,0,255,255), 2.0f);
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(vRightHandOut.x, vRightHandOut.y), ImVec2(vUpperArmRightOut.x, vUpperArmRightOut.y), ImColor(255,0,255,255), 2.0f);
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(vLeftHandOut.x, vLeftHandOut.y), ImVec2(vLeftHandOut1.x, vLeftHandOut1.y), ImColor(255,0,255,255), 2.0f);
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(vRightHandOut.x, vRightHandOut.y), ImVec2(vRightHandOut1.x, vRightHandOut1.y), ImColor(255,0,255,255), 2.0f);
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(vLeftThighOut.x, vLeftThighOut.y), ImVec2(vHipOut.x, vHipOut.y), ImColor(255,0,255,255), 2.0f);
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(vRightThighOut.x, vRightThighOut.y), ImVec2(vHipOut.x, vHipOut.y), ImColor(255,0,255,255), 2.0f);
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(vLeftCalfOut.x, vLeftCalfOut.y), ImVec2(vLeftThighOut.x, vLeftThighOut.y), ImColor(255,0,255,255), 2.0f);
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(vRightCalfOut.x, vRightCalfOut.y), ImVec2(vRightThighOut.x, vRightThighOut.y), ImColor(255,0,255,255), 2.0f);
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(vLeftFootOut.x, vLeftFootOut.y), ImVec2(vLeftCalfOut.x, vLeftCalfOut.y), ImColor(255,0,255,255), 2.0f);
-	ImGui::GetOverlayDrawList()->AddLine(ImVec2(vRightFootOut.x, vRightFootOut.y), ImVec2(vRightCalfOut.x, vRightCalfOut.y), ImColor(255,0,255,255), 2.0f);
-}
 
 bool Headd = true;
 bool Neck = false;
@@ -1920,3 +1811,46 @@ void ChangeKey(void* blank)
 		}
 	}
 }
+
+
+HRESULT DirectXInit(HWND hWnd) {
+	if (FAILED(Direct3DCreate9Ex(D3D_SDK_VERSION, &p_Object))) {
+		exit(3);
+	}
+
+	ZeroMemory(&p_Params, sizeof(p_Params));
+	p_Params.Windowed = TRUE;
+	p_Params.SwapEffect = D3DSWAPEFFECT_DISCARD;
+	p_Params.hDeviceWindow = hWnd;
+	p_Params.MultiSampleQuality = D3DMULTISAMPLE_NONE;
+	p_Params.BackBufferFormat = D3DFMT_A8R8G8B8;
+	p_Params.BackBufferWidth = Settings::Majors::Width;
+	p_Params.BackBufferHeight = Settings::Majors::Height;
+	p_Params.EnableAutoDepthStencil = TRUE;
+	p_Params.AutoDepthStencilFormat = D3DFMT_D16;
+	p_Params.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+
+	if (FAILED(p_Object->CreateDeviceEx(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &p_Params, 0, &p_Device)))
+	{
+		p_Object->Release();
+		exit(4);
+	}
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.IniFilename = nullptr; //crutial for not leaving the imgui.ini file
+
+	ImGui_ImplWin32_Init(hWnd);
+	ImGui_ImplDX9_Init(p_Device);
+
+	ImGui::GetMouseCursor();
+	ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+	ImGui::GetIO().WantCaptureMouse = Settings::Majors::menuIsOpen;
+	ImGui::GetIO().MouseDrawCursor = Settings::Majors::menuIsOpen;
+
+	p_Object->Release();
+	return S_OK;
+}
+
