@@ -113,7 +113,7 @@ struct {
 } color;
 
 struct {
-	// item set ==============================================================
+
 	
 	float aimkey;
 	float hitbox;
@@ -173,18 +173,6 @@ struct {
 
 	float Transparency = 0.8f;
 
-	//team ==============================================================
-	bool Team_Aimbot;
-	bool radar;
-	bool FOVChanger;
-	bool chams;
-
-	float FOVChangerValueX;
-	float FOVChangerValueY;
-	float FOVChangerValueZ;
-
-	bool VisableCheck;
-
 } item;
 
 
@@ -216,3 +204,39 @@ void DrawCornerBox(int X, int Y, int W, int H, const ImU32& color, int thickness
 	ImGui::GetOverlayDrawList()->AddLine(ImVec2(X + W, Y + H - lineH), ImVec2(X + W, Y + H), ImGui::GetColorU32(color), thickness);
 }
 
+
+
+std::string string_To_UTF8(const std::string& str)
+{
+	int nwLen = ::MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, NULL, 0);
+
+	wchar_t* pwBuf = new wchar_t[nwLen + 1];
+	ZeroMemory(pwBuf, nwLen * 2 + 2);
+
+	::MultiByteToWideChar(CP_ACP, 0, str.c_str(), str.length(), pwBuf, nwLen);
+
+	int nLen = ::WideCharToMultiByte(CP_UTF8, 0, pwBuf, -1, NULL, NULL, NULL, NULL);
+
+	char* pBuf = new char[nLen + 1];
+	ZeroMemory(pBuf, nLen + 1);
+
+	::WideCharToMultiByte(CP_UTF8, 0, pwBuf, nwLen, pBuf, nLen, NULL, NULL);
+
+	std::string retStr(pBuf);
+
+	delete[]pwBuf;
+	delete[]pBuf;
+
+	pwBuf = NULL;
+	pBuf = NULL;
+
+	return retStr;
+}
+
+typedef struct
+{
+	DWORD R;
+	DWORD G;
+	DWORD B;
+	DWORD A;
+}RGBA;
