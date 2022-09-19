@@ -42,8 +42,6 @@ namespace Driver
 	
 	
 
-
-bool C_Engine::WorldToScreen(const Vector& origin, Vector2D& screen)
 {
 	g_pCamera = GetCamera();
 	if (!g_pCamera)
@@ -59,7 +57,7 @@ bool C_Engine::WorldToScreen(const Vector& origin, Vector2D& screen)
 	return z >= 1.0f;
 }
 
-float C_Engine::W2SDistance(Vector position)
+float C_Engine::W2SDistance(position)
 {
 	if (!g_pCamera)
 		return -1;
