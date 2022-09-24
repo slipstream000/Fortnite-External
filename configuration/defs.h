@@ -213,9 +213,6 @@ inline void* qmemcpy(void* dst, const void* src, size_t cnt)
 template<class T>  int16 __PAIR__(int8  high, T low) { return (((int16)high) << sizeof(high) * 8) | uint8(low); }
 template<class T>  int32 __PAIR__(int16 high, T low) { return (((int32)high) << sizeof(high) * 8) | uint16(low); }
 template<class T>  int64 __PAIR__(int32 high, T low) { return (((int64)high) << sizeof(high) * 8) | uint32(low); }
-template<class T> uint16 __PAIR__(uint8  high, T low) { return (((uint16)high) << sizeof(high) * 8) | uint8(low); }
-template<class T> uint32 __PAIR__(uint16 high, T low) { return (((uint32)high) << sizeof(high) * 8) | uint16(low); }
-template<class T> uint64 __PAIR__(uint32 high, T low) { return (((uint64)high) << sizeof(high) * 8) | uint32(low); }
 
 // rotate left
 template<class T> T __ROL__(T value, int count)
@@ -245,9 +242,6 @@ inline uint8  __ROL1__(uint8  value, int count) { return __ROL__((uint8)value, c
 inline uint16 __ROL2__(uint16 value, int count) { return __ROL__((uint16)value, count); }
 inline uint32 __ROL4__(uint32 value, int count) { return __ROL__((uint32)value, count); }
 inline uint64 __ROL8__(uint64 value, int count) { return __ROL__((uint64)value, count); }
-inline uint8  __ROR1__(uint8  value, int count) { return __ROL__((uint8)value, -count); }
-inline uint16 __ROR2__(uint16 value, int count) { return __ROL__((uint16)value, -count); }
-inline uint32 __ROR4__(uint32 value, int count) { return __ROL__((uint32)value, -count); }
 inline uint64 __ROR8__(uint64 value, int count) { return __ROL__((uint64)value, -count); }
 
 // carry flag of left shift
@@ -347,11 +341,6 @@ template<class T, class U> int8 __CFADD__(T x, U y)
 #define __ROL__(x, y) __rotl__(x, y)      // Rotate left
 #define __ROR__(x, y) __rotr__(x, y)      // Rotate right
 #define __CFSHL__(x, y) invalid_operation // Generate carry flag for (x<<y)
-#define __CFSHR__(x, y) invalid_operation // Generate carry flag for (x>>y)
-#define __CFADD__(x, y) invalid_operation // Generate carry flag for (x+y)
-#define __CFSUB__(x, y) invalid_operation // Generate carry flag for (x-y)
-#define __OFADD__(x, y) invalid_operation // Generate overflow flag for (x+y)
-#define __OFSUB__(x, y) invalid_operation // Generate overflow flag for (x-y)
 #endif
 
 // No definition for rcl/rcr because the carry flag is unknown
@@ -406,12 +395,6 @@ public:
 	RGBA Magenta = { 255,0,255,255 };
 	RGBA yellow = { 255,255,0,255 };
 	RGBA grayblue = { 128,128,255,255 };
-	RGBA green = { 128,224,0,255 };
-	RGBA darkgreen = { 0,224,128,255 };
-	RGBA brown = { 192,96,0,255 };
-	RGBA pink = { 255,168,255,255 };
-	RGBA DarkYellow = { 216,216,0,255 };
-	RGBA SilverWhite = { 236,236,236,255 };
 	RGBA purple = { 144,0,255,255 };
 	RGBA Navy = { 88,48,224,255 };
 	RGBA skyblue = { 0,136,255,255 };
@@ -454,11 +437,7 @@ public:
 	RGBA blue_ = { 0,96,192,200 };
 	RGBA orange_ = { 255,128,0,200 };
 	RGBA pinks_ = { 255,80,128,200 };
-	RGBA Fuhong_ = { 255,128,192,200 };
-	RGBA darkgray_ = { 96,96,96,200 };
-	RGBA Navy_ = { 0,0,128,200 };
-	RGBA darkgreens_ = { 0,128,0,200 };
-	RGBA darkblue_ = { 0,128,128,200 };
+	RGBA Fuhong_ = { 255,128,192,200 };;
 	RGBA redbrown_ = { 128,0,0,200 };
 	RGBA purplered_ = { 128,0,128,200 };
 	RGBA greens_ = { 0,255,0,200 };
@@ -470,4 +449,3 @@ public:
 	RGBA Plum = { 221,160,221,160 };
 };
 
-Color Col;
