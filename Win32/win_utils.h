@@ -19,6 +19,37 @@
 #include "../Imgui/imgui_impl_win32.h"
 #include "../Defines\defs.h"
 
+
+typedef struct info_t {
+	int pid = 0;
+	DWORD_PTR address;
+	void* value;
+	SIZE_T size;
+	void* data;
+}	info, * p_info;
+
+template <typename Type>
+Type read(void* DriverHandle, unsigned long int Process_Identifier, unsigned long long int Address)
+{
+	info_t Input_Output_Data;
+
+	Input_Output_Data.pid = Process_Identifier;
+
+	Input_Output_Data.address = Address;
+
+	Type Return_Value;
+
+	Input_Output_Data.value = &Return_Value;
+
+	Input_Output_Data.size = sizeof(Type);
+
+	unsigned long int Readed_Bytes_Amount;
+
+	DeviceIoControl(DriverHandle, ctl_read, &Input_Output_Data, sizeof Input_Output_Data, &Input_Output_Data, sizeof Input_Output_Data, &Readed_Bytes_Amount, nullptr);
+
+	return *(Type*)&Return_Value;
+}
+
 HANDLE DriverHandle;
 uint64_t base_address;
 HWND hwnd = NULL;
@@ -155,11 +186,6 @@ D3DMATRIX MatrixMultiplication(D3DMATRIX pM1, D3DMATRIX pM2)
 	pOut._14 = pM1._11 * pM2._14 + pM1._12 * pM2._24 + pM1._13 * pM2._34 + pM1._14 * pM2._44;
 	pOut._21 = pM1._21 * pM2._11 + pM1._22 * pM2._21 + pM1._23 * pM2._31 + pM1._24 * pM2._41;
 	pOut._22 = pM1._21 * pM2._12 + pM1._22 * pM2._22 + pM1._23 * pM2._32 + pM1._24 * pM2._42;
-	pOut._23 = pM1._21 * pM2._13 + pM1._22 * pM2._23 + pM1._23 * pM2._33 + pM1._24 * pM2._43;
-	pOut._24 = pM1._21 * pM2._14 + pM1._22 * pM2._24 + pM1._23 * pM2._34 + pM1._24 * pM2._44;
-	pOut._31 = pM1._31 * pM2._11 + pM1._32 * pM2._21 + pM1._33 * pM2._31 + pM1._34 * pM2._41;
-	pOut._32 = pM1._31 * pM2._12 + pM1._32 * pM2._22 + pM1._33 * pM2._32 + pM1._34 * pM2._42;
-	pOut._33 = pM1._31 * pM2._13 + pM1._32 * pM2._23 + pM1._33 * pM2._33 + pM1._34 * pM2._43;
 	pOut._34 = pM1._31 * pM2._14 + pM1._32 * pM2._24 + pM1._33 * pM2._34 + pM1._34 * pM2._44;
 	pOut._41 = pM1._41 * pM2._11 + pM1._42 * pM2._21 + pM1._43 * pM2._31 + pM1._44 * pM2._41;
 	pOut._42 = pM1._41 * pM2._12 + pM1._42 * pM2._22 + pM1._43 * pM2._32 + pM1._44 * pM2._42;
@@ -185,13 +211,15 @@ lkmc_futex(int *uaddr, int futex_op, int val,
         "svc 0;"
         : "+r" (x0)
         : "r" (x1), "r" (x2), "r" (x3), "r" (x4), "r" (x5), "r" (x8)
-        : "memory"
+        : "Runtime"
     );
     return x0;
 #else
     (void)uaddr2;
     return syscall(SYS_futex, uaddr, futex_op, val,
                     timeout, uaddr, val3);
-#endif
+	
 }
+
+
 
