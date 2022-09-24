@@ -46,8 +46,9 @@ https://user-images.githubusercontent.com/94861415/179345884-75769805-4197-4557-
 
 
 ***
+![fn fnober](https://user-images.githubusercontent.com/94861415/192077908-f8980c78-a028-4b90-bd14-5413595bf96e.png)
+![fas](https://user-images.githubusercontent.com/94861415/192078096-e5e5ec51-ab4b-4042-9c88-76e15bfde2e2.png)
 
-![aimbs](https://user-images.githubusercontent.com/94861415/179345852-da4dc24d-d856-45a1-b8b2-2063656cc5ff.png)
 
 
 ***
