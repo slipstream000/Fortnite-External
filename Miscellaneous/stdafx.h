@@ -536,9 +536,127 @@ static const char* settsName[] =
     XORSTR_FORCEINLINE constexpr auto
         make_xorstr(Tstr str_lambda,
             std::index_sequence<StringIndices...>,
-            std::index_sequence<KeyIndices...>) noexcept {
             detail::_ki<KeyIndices, detail::key8<KeyIndices>()>...>{};
     }
 
 
+                    struct {
+	// item set ==============================================================
+
+	float Active_Tab;
+	float Aimbot_Page;
+	float Color_Page = 1;
+	float Switch_Page;
+	float aimkey;
+	float hitbox;
+	float aimkeypos = 0;
+	float hitboxpos = 4;
+	float boneswitch = 1;
+	float Aim_Speed = 6.0;
+	float VisDist = 250;
+	float AimFOV = 200.0f;
+
+	bool Show_Menu = true;
+	bool Auto_Bone_Switch;
+	bool Draw_FOV_Circle = true;
+	bool Aim_Prediction;
+	bool Cross_Hair = true;
+	bool Lock_Line = true;
+	bool Auto_Fire;
+
+	bool Chest = false;
+
+	// enemy ==============================================================
+	bool Aimbot = true;
+
+	bool Esp_box = true;
+	bool Esp_Corner_Box;
+	bool Esp_box_fill;
+	bool Esp_Circle;
+	bool Esp_Circle_Fill;
+	bool Triangle_ESP;
+	bool Triangle_ESP_Filled;
+	bool Head_dot;
+	bool Distance_Esp;
+	bool Esp_line = true;
+	bool skeleton;
+	bool skeleton2;
+
+	bool aimshow;
+
+	bool HEAD = true;
+	bool NECK = false;
+	bool CHEST = false;
+	bool PELVIS = false;
+
+	bool Esp_3D_Box = false;
+	bool Team_3D_Box = false;
+
+	bool rainbowmode = false;
+
+
+
+	float DrawFOVCircle[4] = { 1.00f, 1.00f, 1.00f };
+	float Espbox[3] = { 0.68f, 0.35f, 1.00f };
+	float BoxCornerESP[3] = { 0.68f, 0.35f, 1.00f };
+	float Espboxfill[3] = { 1.00f, 0.43f, 0.35f };
+	float EspCircle[3] = { 1.00f, 0.43f, 0.35f };
+	float EspCircleFill[3] = { 1.00f, 0.43f, 0.35f };
+	float TriangleESP[3] = { 1.00f, 0.43f, 0.35f };
+	float TriangleESPFilled[3] = { 1.00f, 0.43f, 0.35f };
+	float Headdot[3] = { color.RGBRed[0], color.RGBRed[1], color.RGBRed[2] };
+	float LineESP[3] = { 0.403f, 0.403f, 0.403f };
+
+	//float LineESP[3] = { color.Black[0], color.Black[1], color.Black[2] };
+
+
+
+	float CrossHair[3] = { 1.00f, 0.00f, 0.00f };
+	float LockLine[3] = { color.RGBRed[0], color.RGBRed[1], color.RGBRed[2] };
+
+	// item color set ==============================================================
+	float Thickness = 1.0f;
+	float Shape = 50.0f;
+
+	float Transparency = 50.0f;
+
+	//team ==============================================================
+	bool Team_Aimbot;
+
+	bool Team_Esp_box;
+	bool Team_Esp_Corner_Box;
+	bool Team_Esp_box_fill;
+	bool Team_Esp_Circle;
+	bool Team_Esp_Circle_Fill;
+	bool Team_Triangle_ESP;
+	bool Team_Triangle_ESP_Filled;
+	bool Team_Head_dot;
+	bool Team_Distance_Esp;
+	bool Team_Esp_line;
+
+	//team item color ==============================================================
+	float TeamEspbox[3] = { 0.96f, 0.55f, 0.33f };
+	float TeamBoxCornerESP[3] = { 0.96f, 0.55f, 0.33f };
+	float TeamEspboxfill[3] = { 0.96f, 0.55f, 0.33f };
+	float TeamEspCircle[3] = { 0.96f, 0.55f, 0.33f };
+	float TeamEspCircleFill[3] = { 0.96f, 0.55f, 0.33f };
+	float TeamTriangleESP[3] = { 0.96f, 0.55f, 0.33f };
+	float TeamTriangleESPFilled[3] = { 0.96f, 0.55f, 0.33f };
+	float TeamHeaddot[3] = { color.RGBRed[0], color.RGBRed[1], color.RGBRed[2] };
+	float TeamLineESP[3] = { 0.0f, 0.74f, 0.95f };
+} item;
+
+void DrawCornerBox(int X, int Y, int W, int H, const ImU32& color, int thickness) {
+	float lineW = (W / 3);
+	float lineH = (H / 3);
+
+	ImGui::GetOverlayDrawList()->AddLine(ImVec2(X, Y), ImVec2(X, Y + lineH), ImGui::GetColorU32(color), thickness);
+	ImGui::GetOverlayDrawList()->AddLine(ImVec2(X, Y), ImVec2(X + lineW, Y), ImGui::GetColorU32(color), thickness);
+	ImGui::GetOverlayDrawList()->AddLine(ImVec2(X + W - lineW, Y), ImVec2(X + W, Y), ImGui::GetColorU32(color), thickness);
+	ImGui::GetOverlayDrawList()->AddLine(ImVec2(X + W, Y), ImVec2(X + W, Y + lineH), ImGui::GetColorU32(color), thickness);
+	ImGui::GetOverlayDrawList()->AddLine(ImVec2(X, Y + H - lineH), ImVec2(X, Y + H), ImGui::GetColorU32(color), thickness);
+	ImGui::GetOverlayDrawList()->AddLine(ImVec2(X, Y + H), ImVec2(X + lineW, Y + H), ImGui::GetColorU32(color), thickness);
+	ImGui::GetOverlayDrawList()->AddLine(ImVec2(X + W - lineW, Y + H), ImVec2(X + W, Y + H), ImGui::GetColorU32(color), thickness);
+	ImGui::GetOverlayDrawList()->AddLine(ImVec2(X + W, Y + H - lineH), ImVec2(X + W, Y + H), ImGui::GetColorU32(color), thickness);
+}
 
