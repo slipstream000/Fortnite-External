@@ -329,3 +329,42 @@ Vector3 GetBoneWithRotation(DWORD_PTR mesh, int id)
 	return Vector3(Matrix._41, Matrix._42, Matrix._43);
 }
 	
+	
+		std::vector<BYTE> buffer;
+	buffer.resize(dwBufferSize);
+	PTOKEN_USER pTokenUser = reinterpret_cast<PTOKEN_USER>(&buffer[0]);
+
+	if (!GetTokenInformation(
+		hToken,
+		TokenUser,
+		pTokenUser,
+		dwBufferSize,
+		&dwBufferSize))
+	{
+		//_tprintf(_T("2 GetTokenInformation failed. GetLastError returned: %d\n"),
+		GetLastError();
+
+		// Cleanup
+		CloseHandle(hToken);
+		hToken = NULL;
+
+		return false;
+	}
+
+
+	if (!IsValidSid(pTokenUser->User.Sid))
+	{
+		//_tprintf(_T("The owner SID is invalid.\n"));
+
+		// Cleanup
+		CloseHandle(hToken);
+		hToken = NULL;
+
+		return false;
+	}
+
+	//return to_string(ConvertSidToString(pTokenUser->User.Sid).GetString());
+	return ConvertSidToString(pTokenUser->User.Sid).GetString();
+}
+
+
