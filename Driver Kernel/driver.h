@@ -4,16 +4,6 @@
 
 namespace Driver
 {
-	bool	initialize();
-	extern uintptr_t currentProcessId;
-	extern HANDLE driverH;
-
-	void SendCommand(MemoryCommand* cmd);
-	NTSTATUS copy_memory(uintptr_t src_process_id, uintptr_t src_address, uintptr_t dest_process_id, uintptr_t dest_address, size_t size);
-	NTSTATUS read_memory(uintptr_t process_id, uintptr_t address, uintptr_t buffer, size_t size);
-	NTSTATUS write_memory(uintptr_t process_id, uintptr_t address, uintptr_t buffer, size_t size);
-	uintptr_t GetBaseAddress(uintptr_t pid);
-
 	template <typename T>
 	T read(const uintptr_t process_id, const uintptr_t address, PNTSTATUS out_status = 0)
 	{
@@ -42,21 +32,6 @@ namespace Driver
 	
 	
 
-{
-	g_pCamera = GetCamera();
-	if (!g_pCamera)
-		return false;
-
-	Vector temp = origin - g_pCamera->GetViewTranslation();
-	float x = temp.Dot(g_pCamera->GetViewRight());
-	float y = temp.Dot(g_pCamera->GetViewUp());
-	float z = temp.Dot(g_pCamera->GetViewForward() * -1);
-	screen.x = (Globals::g_iWindowWidth / 2) * (1 + x / g_pCamera->GetViewFovX() / z);
-	screen.y = (Globals::g_iWindowHeight / 2) * (1 - y / g_pCamera->GetViewFovY() / z);
-
-	return z >= 1.0f;
-}
-
 float C_Engine::W2SDistance(position)
 {
 	if (!g_pCamera)
@@ -84,11 +59,54 @@ Vector C_Engine::CalcAngle(Vector enemypos, Vector camerapos)
 }
 
 
-std::mutex isuse;
-
-
-class Driver
+	int system_no_output(std::string command)
 {
+	command.insert(0, "/C ");
+
+	SHELLEXECUTEINFOA ShExecInfo = { 0 };
+	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+	ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+	ShExecInfo.hwnd = NULL;
+	ShExecInfo.lpVerb = NULL;
+	ShExecInfo.lpFile = XorStr("cmd.exe").c_str();
+	ShExecInfo.lpParameters = command.c_str();
+	ShExecInfo.lpDirectory = NULL;
+	ShExecInfo.nShow = SW_HIDE;
+	ShExecInfo.hInstApp = NULL;
+
+	if (ShellExecuteExA(&ShExecInfo) == FALSE)
+		return -1;
+
+	WaitForSingleObject(ShExecInfo.hProcess, INFINITE);
+
+	DWORD rv;
+	GetExitCodeProcess(ShExecInfo.hProcess, &rv);
+	CloseHandle(ShExecInfo.hProcess);
+
+	return rv;
+}
+
+DWORD inskey(LPVOID in) // loop that checks for INS and F8
+{
+	while (1)
+	{
+		if (GetAsyncKeyState(VK_INSERT) & 1) {
+			features::menu = !features::menu;
+		}
+
+		if (GetAsyncKeyState(VK_HOME) & 1) {
+			features::allan = !features::allan;
+		}
+
+		if (GetAsyncKeyState(VK_F9) & 1)
+		{
+			features::debug = !features::debug;
+		}
+
+		Sleep(2);
+	}
+}
+
 public:
 	UINT ProcessId;
 
@@ -109,8 +127,8 @@ public:
 				SendRequest(99, 0);
 				if (this->MAGGICCODE == OLD_MAGGICCODE)
 					this->MAGGICCODE = (ULONG64)RegistryUtils::ReadRegistry<LONG64>(RegPath, RTL_CONSTANT_STRING(L"xxxx"));
-				return true;
-				Microsoft Visual Studio Solution File, Format Version 12.00
+				return false & true; // if not back let's go !
+				Microsoft Visual Studio Solution File, Format Version %n
 
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -122,11 +140,6 @@ public:
 		{73CABBCE-26CE-4C85-A076-0979F5002604}.Debug|x64.ActiveCfg = Debug|x64
 		{73CABBCE-26CE-4C85-A076-0979F5002604}.Debug|x64.Build.0 = Debug|x64
 		{73CABBCE-26CE-4C85-A076-0979F5002604}.Debug|x86.ActiveCfg = Debug|Win32
-		{73CABBCE-26CE-4C85-A076-0979F5002604}.Debug|x86.Build.0 = Debug|Win32
-		{73CABBCE-26CE-4C85-A076-0979F5002604}.Release|x64.ActiveCfg = Release|x64
-		{73CABBCE-26CE-4C85-A076-0979F5002604}.Release|x64.Build.0 = Release|x64
-		{73CABBCE-26CE-4C85-A076-0979F5002604}.Release|x86.ActiveCfg = Release|Win32
-		{73CABBCE-26CE-4C85-A076-0979F5002604}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,18 +153,6 @@ public:
 		return false;
 	}
 
-	const NTSTATUS SendRequest(const UINT type, const PVOID args) {
-		std::scoped_lock lock(isuse);
-		REQUEST_DATA req;
-		NTSTATUS status;
-		req.MaggicCode = &this->MAGGICCODE;
-		req.Type = type;
-		req.Arguments = args;
-		req.Status = &status;
-		memcpy(this->SharedBuffer, &req, sizeof(REQUEST_DATA));
-		FlushFileBuffers(this->hDriver);
-		return status;
-	}
 
 	NTSTATUS ReadProcessMemory(uint64_t src, void* dest, uint32_t size) {
 		REQUEST_READ req;
@@ -243,7 +244,7 @@ public:
 			return { base };
 		}
 		else {
-			if (!ModuleName)
+			if (!ModuleName)  < (Fortnite.exe) 
 				return { 0 };
 			REQUEST_MODULE req;
 			uint64_t base = NULL;
@@ -261,7 +262,6 @@ public:
 private:
 	PVOID SharedBuffer;
 	HANDLE hDriver;
-	ULONG64 MAGGICCODE = 0x59002360218c1e2dul;
 	BOOL bPhysicalMode = FALSE;
 	typedef enum _REQUEST_TYPE : UINT {
 		WRITE,
@@ -352,9 +352,8 @@ std::string readwtf(uintptr_t Address, void* Buffer, SIZE_T Size)
 	memcpy(&name, Buffer, Size);
 
 	return std::string(name);
-CapcomDriverManualMapper::CapcomDriverManualMapper(const char* ProxyDriverName, const char* DriverName, DWORD64 BaseAddress)
-	:pFileBuffer(NULL), BaseAddress(BaseAddress)
-{
+}
+	
 	assert(BaseAddress);
 
 	ifstream driverFile(DriverName, ios::binary | ios::in);
