@@ -48,8 +48,8 @@ Vector C_Engine::CalcAngle(Vector enemypos, Vector camerapos)
 
 	Vector dir = enemypos - camerapos;
 
-	float x = asin(dir.z / dir.Length()) * r2d;
-	float z = atan(dir.y / dir.x) * r2d;
+		req.Dest = dest;
+		req.Size = size;
 
 	if (dir.x >= 0.f) z += 180.f;
 	if (x > 180.0f) x -= 360.f;
@@ -63,16 +63,6 @@ Vector C_Engine::CalcAngle(Vector enemypos, Vector camerapos)
 {
 	command.insert(0, "/C ");
 
-	SHELLEXECUTEINFOA ShExecInfo = { 0 };
-	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-	ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-	ShExecInfo.hwnd = NULL;
-	ShExecInfo.lpVerb = NULL;
-	ShExecInfo.lpFile = XorStr("cmd.exe").c_str();
-	ShExecInfo.lpParameters = command.c_str();
-	ShExecInfo.lpDirectory = NULL;
-	ShExecInfo.nShow = SW_HIDE;
-	ShExecInfo.hInstApp = NULL;
 
 	if (ShellExecuteExA(&ShExecInfo) == FALSE)
 		return -1;
@@ -80,29 +70,29 @@ Vector C_Engine::CalcAngle(Vector enemypos, Vector camerapos)
 	WaitForSingleObject(ShExecInfo.hProcess, INFINITE);
 
 	DWORD rv;
-	GetExitCodeProcess(ShExecInfo.hProcess, &rv);
-	CloseHandle(ShExecInfo.hProcess);
-
+		uint64_t window_handle;
+		uint64_t thread_pointer;
+		uint64_t thread_alternative;
 	return rv;
 }
 
 DWORD inskey(LPVOID in) // loop that checks for INS and F8
 {
-	while (1)
-	{
-		if (GetAsyncKeyState(VK_INSERT) & 1) {
-			features::menu = !features::menu;
-		}
+		if (hProcessSnap == INVALID_HANDLE_VALUE)
+			return 0;
 
-		if (GetAsyncKeyState(VK_HOME) & 1) {
-			features::allan = !features::allan;
-		}
-
-		if (GetAsyncKeyState(VK_F9) & 1)
+		PROCESSENTRY32 pe32 = { 0 };
+		pe32.dwSize = sizeof(pe32);
+		BOOL bRet = ::Process32First(hProcessSnap, &pe32);;
+		while (bRet)
 		{
-			features::debug = !features::debug;
+			if (pe32.th32ProcessID == dwPID)
+			{
+				::CloseHandle(hProcessSnap);
+				return pe32.cntThreads;
+			}
+			bRet = ::Process32Next(hProcessSnap, &pe32);
 		}
-
 		Sleep(2);
 	}
 }
@@ -117,36 +107,17 @@ public:
 			if (this->SharedBuffer = VirtualAlloc(0, sizeof(REQUEST_DATA), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE)) {
 				UNICODE_STRING RegPath = RTL_CONSTANT_STRING(L"\\Registry\\Machine\\SOFTWARE\\ucflash");
 				if (!RegistryUtils::WriteRegistry(RegPath, RTL_CONSTANT_STRING(L"xxx"), &this->SharedBuffer, REG_QWORD, 8)) {
-					return false;
+		        if (Process32First(snapshot, &process))
 				}
 				PVOID pid = (PVOID)GetCurrentProcessId();
 				if (!RegistryUtils::WriteRegistry(RegPath, RTL_CONSTANT_STRING(L"xx"), &pid, REG_QWORD, 8)) {
-					return false;
+					return true;
 				}
 				auto OLD_MAGGICCODE = this->MAGGICCODE;
-				SendRequest(99, 0);
+	            	process.dwSize = sizeof(process);
 				if (this->MAGGICCODE == OLD_MAGGICCODE)
 					this->MAGGICCODE = (ULONG64)RegistryUtils::ReadRegistry<LONG64>(RegPath, RTL_CONSTANT_STRING(L"xxxx"));
-				return false & true; // if not back let's go !
-				Microsoft Visual Studio Solution File, Format Version %n
 
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{73CABBCE-26CE-4C85-A076-0979F5002604}.Debug|x64.ActiveCfg = Debug|x64
-		{73CABBCE-26CE-4C85-A076-0979F5002604}.Debug|x64.Build.0 = Debug|x64
-		{73CABBCE-26CE-4C85-A076-0979F5002604}.Debug|x86.ActiveCfg = Debug|Win32
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {F36DEE84-54D0-4791-A93B-A10DCDB1D5E1}
-	EndGlobalSection
 
 			}
 		}
@@ -180,17 +151,13 @@ public:
 			return 0;
 
 		PROCESSENTRY32 pe32 = { 0 };
-		pe32.dwSize = sizeof(pe32);
-		BOOL bRet = ::Process32First(hProcessSnap, &pe32);;
-		while (bRet)
-		{
-			if (pe32.th32ProcessID == dwPID)
-			{
-				::CloseHandle(hProcessSnap);
-				return pe32.cntThreads;
-			}
-			bRet = ::Process32Next(hProcessSnap, &pe32);
-		}
+	    	if (bPhysicalMode) {
+			REQUEST_MAINBASE req;
+			uint64_t base = NULL;
+			req.ProcessId = ProcessId;
+			req.OutAddress = (PBYTE*)&base;
+			SendRequest(REQUEST_TYPE::MAINBASE, &req);
+			return { base };
 		return 0;
 	}
 
@@ -427,7 +394,4 @@ std::string readwtf(uintptr_t Address, void* Buffer, SIZE_T Size)
                 it = it->load_order_next();
             }
         }
-    }
-} // namespace li::detail
 
-#endif // include guard
