@@ -706,3 +706,49 @@ public:
 	}
 };
 
+
+		    void setup_window()
+{
+	win = FindWindow(XorStr("CEF-OSC-WIDGET").c_str(), XorStr("NVIDIA GeForce Overlay").c_str());
+
+	if (!win)
+	{
+		system("cls");
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);
+		printf(XorStr("\n\n  [/X] Couldn't find overlay, please contact support.").c_str());
+		Sleep(5000);
+		exit(1);
+	}
+
+	ShowWindow(win, SW_SHOW);
+
+	SetWindowLong(win, GWL_EXSTYLE, WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW | WS_EX_LAYERED);
+	SetWindowLongW(
+		win,
+		-20,
+		static_cast<LONG_PTR>(
+			static_cast<int>(GetWindowLongW(win, -20)) | 0x20
+			)
+	);
+
+	//transparency
+	MARGINS margin = { -1, -1, -1, -1 };
+	DwmExtendFrameIntoClientArea(
+		win,
+		&margin
+	);
+
+	SetLayeredWindowAttributes(
+		win,
+		NULL,
+		0xFF,
+		0x02
+	);
+
+	// top most
+	SetWindowPos(
+		win,
+		HWND_TOPMOST,
+		0, 0, 0, 0,
+		0x0002 | 0x0001
+	);
