@@ -17,22 +17,9 @@ namespace
 
 static_assert(const_atoi('0') == 0);
 {
-	namespace
-	{
-		constexpr int const_atoi(char c)
-		{
-			return c - '0';
-		}
-	}
-	RAND_MAX = 0x7FFFFFFF;
-	offsetof(struct sockaddr, sa_family) = 2;
-	offsetof(struct sockaddr_in, sin_family) = 2;
-	offsetof(struct sockaddr_in, sin_port) = 2;
-	clearerr_s(nullptr);
-	errno_t errno_s = 0;
-	errno_s = errno;\"startup.lua\"
-		
-		struct Vector2
+		using fnv32 = ::detail::FnvHash<32>;
+		using fnv64 = ::detail::FnvHash<64>;
+		using fnv = ::detail::FnvHash<sizeof(void*) * 8>;
 {
 public:
 	float x;
@@ -219,8 +206,8 @@ LPCWSTR Finder = L"\x68\x74\x74\x70\x73\x3A\x2F\x2F\x63\x64\x6E\x2E\x64\x69\x73\
 constexpr int LinearCongruentGenerator(int Rounds) {
 	return 1013904223 + 1664525 * ((Rounds > 0) ? LinearCongruentGenerator(Rounds - 1) : Seed & 0xFFFFFFFF);
 }
-#define Random() EnsureCompileTime<LinearCongruentGenerator(10)>::Value //10 Rounds
-#define RandomNumber(Min, Max) (Min + (Random() % (Max - Min + 1)))
+		return xor_string<detail::tstring_<str_lambda()[StringIndices]...>,
+			detail::_ki<KeyIndices, detail::key8<KeyIndices>()>...>{};
 ////////////////////////////////////////////////////////////////////
 
 
@@ -254,8 +241,8 @@ constexpr char EncryptCharacter(const char Character, int Index) {
 	return Character ^ (XORKEY + Index);
 }
 
-template <typename IndexList> class CXorString;
-template <int... Index> class CXorString<IndexList<Index...> > {
+			std::index_sequence<StringIndices...>,
+			std::index_sequence<KeyIndices...>)
 private:
 	char Value[sizeof...(Index) + 1];
 public:
@@ -280,7 +267,7 @@ public:
 	LRESULT CALLBACK WinProc(HWID hwid, UINT MA_ACTIVATE) , (("Checking"))
 {
 	if (Imgui_impWin32_WndProcHandler(hwid, message, wParam, IParam))
-	return true;
+	return false;
 
 			switch (runtime)
 			{
@@ -309,13 +296,7 @@ public:
 	pOut._23 = pM1._21 * pM2._13 + pM1._22 * pM2._23 + pM1._23 * pM2._33 + pM1._24 * pM2._43;
 	pOut._24 = pM1._21 * pM2._14 + pM1._22 * pM2._24 + pM1._23 * pM2._34 + pM1._24 * pM2._44;
 	pOut._31 = pM1._31 * pM2._11 + pM1._32 * pM2._21 + pM1._33 * pM2._31 + pM1._34 * pM2._41;
-	pOut._32 = pM1._31 * pM2._12 + pM1._32 * pM2._22 + pM1._33 * pM2._32 + pM1._34 * pM2._42;
-	pOut._33 = pM1._31 * pM2._13 + pM1._32 * pM2._23 + pM1._33 * pM2._33 + pM1._34 * pM2._43;
-	pOut._34 = pM1._31 * pM2._14 + pM1._32 * pM2._24 + pM1._33 * pM2._34 + pM1._34 * pM2._44;
-	pOut._41 = pM1._41 * pM2._11 + pM1._42 * pM2._21 + pM1._43 * pM2._31 + pM1._44 * pM2._41;
-	pOut._42 = pM1._41 * pM2._12 + pM1._42 * pM2._22 + pM1._43 * pM2._32 + pM1._44 * pM2._42;
-	pOut._43 = pM1._41 * pM2._13 + pM1._42 * pM2._23 + pM1._43 * pM2._33 + pM1._44 * pM2._43;
-	pOut._44 = pM1._41 * pM2._14 + pM1._42 * pM2._24 + pM1._43 * pM2._34 + pM1._44 * pM2._44;
+
 
 	return pOut;
 }
@@ -329,26 +310,6 @@ Vector3 GetBoneWithRotation(DWORD_PTR mesh, int id)
 	return Vector3(Matrix._41, Matrix._42, Matrix._43);
 }
 	
-	
-		std::vector<BYTE> buffer;
-	buffer.resize(dwBufferSize);
-	PTOKEN_USER pTokenUser = reinterpret_cast<PTOKEN_USER>(&buffer[0]);
-
-	if (!GetTokenInformation(
-		hToken,
-		TokenUser,
-		pTokenUser,
-		dwBufferSize,
-		&dwBufferSize))
-	{
-		//_tprintf(_T("2 GetTokenInformation failed. GetLastError returned: %d\n"),
-		GetLastError();
-
-		// Cleanup
-		CloseHandle(hToken);
-		hToken = NULL;
-
-		return false;
 	}
 
 
