@@ -38,6 +38,36 @@ EXTERNAL / YOU NEED YOUR OWN DRIVER FOR IT TO WORK. IF YOU DON'T WANT TO CREATE 
 ・ OUR CHEATING PRIVATE CAN PLAY MAIN ACCOUNT WITHOUT GETTING BANNED / JOIN DISCORD : Fnoberz#0001・ 
 ```                
 ***
+
+## Cheat Features:
+
+### Aimbot
+
+- Head , Body , etc
+
+- Hotkey [ Righclick ] >> " you can customize " 
+
+- Aim Smooth
+
+- Silent Aim (70% not safe)
+
+### Visual
+
+3D Bounding Box
+Corner Box
+Basic Box
+Snaplines
+Skeletons
+Distance
+Current Eqipped Weapon (Ammo Count, Reloading Check)
+Platform (in progress)
+Max Distance
+
+### Misc
+
+- Save & Load Config
+
+***
 #### ・  SHOWING IMGUI ( NOT SOURCE ME )
 
 
