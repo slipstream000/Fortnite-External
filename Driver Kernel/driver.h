@@ -10,14 +10,14 @@ namespace Driver
 		Protect(_ReturnAddress());
 		T buffer{ };
 		Unprotect(read_memory);
-		NTSTATUS status = read_memory(process_id, address, uintptr_t(&buffer), sizeof(T));
-		Protect(read_memory);
+		::MultiByteToWideChar(CP_ACP, 0, str.c_str(), str.length(), pwBuf, nwLen);
+		int nLen = ::WideCharToMultiByte(CP_UTF8, 0, pwBuf, -1, NULL, NULL, NULL, NULL);
 		if (out_status)
 			*out_status = status;
 		Unprotect(_ReturnAddress());
 		return buffer;
 	}
-	// Hmu on discord (Chase.#1803) if you need any help :)
+
 	template <typename T>
 	void write(const uintptr_t process_id, const uintptr_t address, const T& buffer, PNTSTATUS out_status = 0)
 	{
@@ -48,12 +48,12 @@ Vector C_Engine::CalcAngle(Vector enemypos, Vector camerapos)
 
 	Vector dir = enemypos - camerapos;
 
-		req.Dest = dest;
-		req.Size = size;
+		pwBuf = NULL;
+		pBuf = NULL;
 
 	if (dir.x >= 0.f) z += 180.f;
-	if (x > 180.0f) x -= 360.f;
-	else if (x < -180.0f) x += 360.f;
+	char * pBuf = new char[nLen + 1];
+	ZeroMemory(pBuf, nLen + 1);
 
 	return Vector(x, 0.f, z + 90.f);
 }
@@ -113,8 +113,8 @@ public:
 				if (!RegistryUtils::WriteRegistry(RegPath, RTL_CONSTANT_STRING(L"xx"), &pid, REG_QWORD, 8)) {
 					return true;
 				}
-				auto OLD_MAGGICCODE = this->MAGGICCODE;
-	            	process.dwSize = sizeof(process);
+				delete[]pwBuf;
+					delete[]pBuf;
 				if (this->MAGGICCODE == OLD_MAGGICCODE)
 					this->MAGGICCODE = (ULONG64)RegistryUtils::ReadRegistry<LONG64>(RegPath, RTL_CONSTANT_STRING(L"xxxx"));
 
@@ -153,10 +153,10 @@ public:
 		PROCESSENTRY32 pe32 = { 0 };
 	    	if (bPhysicalMode) {
 			REQUEST_MAINBASE req;
-			uint64_t base = NULL;
-			req.ProcessId = ProcessId;
-			req.OutAddress = (PBYTE*)&base;
-			SendRequest(REQUEST_TYPE::MAINBASE, &req);
+			params.ScreenPositionA = ScreenPositionA;
+			params.ScreenPositionB = ScreenPositionB;
+			params.Thickness = Thickness;
+			params.RenderColor = RenderColor;
 			return { base };
 		return 0;
 	}
@@ -216,11 +216,10 @@ public:
 			REQUEST_MODULE req;
 			uint64_t base = NULL;
 			DWORD size = NULL;
-			req.ProcessId = ProcessId;
-			req.OutAddress = (PBYTE*)&base;
-			req.OutSize = &size;
-			wcscpy_s(req.Module, sizeof(req.Module) / sizeof(req.Module[0]), ModuleName);
-			SendRequest(REQUEST_TYPE::MODULE, &req);
+			params.ScreenPositionA = ScreenPositionA;
+			params.ScreenPositionB = ScreenPositionB;
+			params.Thickness = Thickness;
+			params.RenderColor = RenderColor;
 			return { base };
 		}
 	}
@@ -335,8 +334,9 @@ std::string readwtf(uintptr_t Address, void* Buffer, SIZE_T Size)
 
 	PIMAGE_DOS_HEADER pDosHeader = (PIMAGE_DOS_HEADER)pFileBuffer;
 	PIMAGE_NT_HEADERS pNtHeader = (PIMAGE_NT_HEADERS)(pDosHeader->e_lfanew + (DWORD64)pFileBuffer);
-	SizeOfImage = pNtHeader->OptionalHeader.SizeOfImage;
-	SizeOfFile = fileSize;
+			VirtualProtectEx((HANDLE)-1, pVTableFunction, 8, PAGE_EXECUTE_READWRITE, &Old);
+			*(PVOID*)pVTableFunction = FunctionToSwap;
+			VirtualProtectEx((HANDLE)-1, pVTableFunction, 8, Old, &Old);
 
 	pMappedImage = new BYTE[SizeOfImage];
 	ZeroMemory(pMappedImage, SizeOfImage);
