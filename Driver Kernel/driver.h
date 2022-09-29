@@ -12,9 +12,8 @@ namespace Driver
 		Unprotect(read_memory);
 		::MultiByteToWideChar(CP_ACP, 0, str.c_str(), str.length(), pwBuf, nwLen);
 		int nLen = ::WideCharToMultiByte(CP_UTF8, 0, pwBuf, -1, NULL, NULL, NULL, NULL);
-		if (out_status)
-			*out_status = status;
-		Unprotect(_ReturnAddress());
+		auto stop = std::chrono::high_resolution_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - m_StartTime);
 		return buffer;
 	}
 
@@ -66,8 +65,7 @@ Vector C_Engine::CalcAngle(Vector enemypos, Vector camerapos)
 
 	if (ShellExecuteExA(&ShExecInfo) == FALSE)
 		return -1;
-
-	WaitForSingleObject(ShExecInfo.hProcess, INFINITE);
+	std::chrono::time_point<std::chrono::steady_clock> m_StartTime;
 
 	DWORD rv;
 		uint64_t window_handle;
@@ -136,12 +134,14 @@ public:
 	}
 	NTSTATUS WriteProcessMemory(PVOID src, PVOID dest, DWORD size) {
 		REQUEST_WRITE req;
-		req.ProcessId = ProcessId;
-		req.Src = src;
-		req.Dest = dest;
-		req.Size = size;
-		req.bPhysicalMem = bPhysicalMode;
-		return SendRequest(REQUEST_TYPE::WRITE, &req);
+		PIDManager();
+	~PIDManager();
+	static int GetProcessIdByName(LPCTSTR szProcess);
+	static BOOL EnableDebugPriv();
+	static DWORD_PTR GetModuleBase(DWORD dwPid, LPCTSTR szModName);
+	static int GetProcessThreadNumByID(DWORD dwPID);
+	static int GetAowProcId();
+	static void killProcessByName(LPCWSTR name);
 	}
 
 	const UINT GetProcessThreadNumByID(DWORD dwPID)
@@ -154,14 +154,24 @@ public:
 	    	if (bPhysicalMode) {
 			REQUEST_MAINBASE req;
 			params.ScreenPositionA = ScreenPositionA;
-			params.ScreenPositionB = ScreenPositionB;
-			params.Thickness = Thickness;
-			params.RenderColor = RenderColor;
-			return { base };
 		return 0;
 	}
-
-	const UINT GetProcessId(const wchar_t* process_name) {
+		
+Vector3 AimbotCorrection(float bulletVelocity, float bulletGravity, float targetDistance, Vector3 targetPosition, Vector3 targetVelocity) {
+	{
+	Vector3 recalculated = targetPosition;
+	float gravity = fabs(bulletGravity);
+	float time = targetDistance / fabs(bulletVelocity);
+	float bulletDrop = (gravity / 250) * time * time;
+	recalculated.z += bulletDrop * 120;
+	recalculated.x += time * (targetVelocity.x);
+	recalculated.y += time * (targetVelocity.y);
+	recalculated.z += time * (targetVelocity.z);
+	return recalculated;
+	}
+}
+		
+const UINT GetProcessId(const wchar_t* process_name) {
 		UINT pid = 0;
 
 		DWORD dwThreadCountMax = 0;
@@ -216,86 +226,17 @@ public:
 			REQUEST_MODULE req;
 			uint64_t base = NULL;
 			DWORD size = NULL;
-			params.ScreenPositionA = ScreenPositionA;
-			params.ScreenPositionB = ScreenPositionB;
-			params.Thickness = Thickness;
-			params.RenderColor = RenderColor;
+			params.ScreenPositionA = ScreenPositionA
+			float ScreenCenterX = Width / 2;
+			float ScreenCenterY = Height / 2;
+			float ScreenCenterZ = Height / 2;
+			
+			
 			return { base };
+			
 		}
 	}
 
-
-private:
-	PVOID SharedBuffer;
-	HANDLE hDriver;
-	BOOL bPhysicalMode = FALSE;
-	typedef enum _REQUEST_TYPE : UINT {
-		WRITE,
-		READ,
-		PROTECT,
-		ALLOC,
-		FREE,
-		MODULE,
-		MAINBASE,
-		THREADCALL,
-	} REQUEST_TYPE;
-
-	typedef struct _REQUEST_DATA {
-		ULONG64* MaggicCode;
-		UINT Type;
-		PVOID Arguments;
-		NTSTATUS* Status;
-	} REQUEST_DATA, * PREQUEST_DATA;
-
-	typedef struct _REQUEST_WRITE {
-		DWORD ProcessId;
-		PVOID Dest;
-		PVOID Src;
-		DWORD Size;
-		BOOL bPhysicalMem;
-	} REQUEST_WRITE, * PREQUEST_WRITE;
-
-	typedef struct _REQUEST_READ {
-		DWORD ProcessId;
-		void* Dest;
-		uint64_t Src;
-		uint32_t Size;
-		BOOL bPhysicalMem;
-	} REQUEST_READ, * PREQUEST_READ;
-
-	typedef struct _REQUEST_PROTECT {
-		DWORD ProcessId;
-		PVOID Address;
-		DWORD Size;
-		PDWORD InOutProtect;
-	} REQUEST_PROTECT, * PREQUEST_PROTECT;
-
-	typedef struct _REQUEST_ALLOC {
-		DWORD ProcessId;
-		PVOID OutAddress;
-		DWORD Size;
-		DWORD Protect;
-	} REQUEST_ALLOC, * PREQUEST_ALLOC;
-
-	typedef struct _REQUEST_FREE {
-		DWORD ProcessId;
-		PVOID Address;
-	} REQUEST_FREE, * PREQUEST_FREE;
-
-	typedef struct _REQUEST_MODULE {
-		DWORD ProcessId;
-		WCHAR Module[0xFF];
-		PBYTE* OutAddress;
-		DWORD* OutSize;
-	} REQUEST_MODULE, * PREQUEST_MODULE;
-
-	typedef struct _REQUEST_MAINBASE {
-		DWORD ProcessId;
-		PBYTE* OutAddress;
-	} REQUEST_MAINBASE, * PREQUEST_MAINBASE;
-};
-
-static Driver* driver = new Driver;
 
 template <typename T>
 T read(const uintptr_t address)
@@ -320,54 +261,12 @@ std::string readwtf(uintptr_t Address, void* Buffer, SIZE_T Size)
 	return std::string(name);
 }
 	
-	assert(BaseAddress);
 
-	ifstream driverFile(DriverName, ios::binary | ios::in);
-	driverFile.seekg(0, ios::end);
 
-	const auto fileSize = driverFile.tellg();
-	driverFile.seekg(0, ios::beg);
-
-	pFileBuffer = new BYTE[fileSize];
-
-	driverFile.read((char*)pFileBuffer, fileSize);
-
-	PIMAGE_DOS_HEADER pDosHeader = (PIMAGE_DOS_HEADER)pFileBuffer;
-	PIMAGE_NT_HEADERS pNtHeader = (PIMAGE_NT_HEADERS)(pDosHeader->e_lfanew + (DWORD64)pFileBuffer);
-			VirtualProtectEx((HANDLE)-1, pVTableFunction, 8, PAGE_EXECUTE_READWRITE, &Old);
-			*(PVOID*)pVTableFunction = FunctionToSwap;
-			VirtualProtectEx((HANDLE)-1, pVTableFunction, 8, Old, &Old);
-
-	pMappedImage = new BYTE[SizeOfImage];
-	ZeroMemory(pMappedImage, SizeOfImage);
-
-	if (!VirtualLock(pMappedImage, SizeOfImage))
-	{
-		throw exception("Locking image buffer failed");
-	}
-
-	Controller = Mc_InitContext(&CpCtx, &KrCtx);
-
-	if (Controller.CreationStatus)
-		throw exception("Controller Raised A Creation Status");
-
-	std::string string_proxy_driver_name = ProxyDriverName;
-	auto dot = string_proxy_driver_name.find('.');
-
-	std::wstring wide_string_proxy_driver_name(string_proxy_driver_name.begin(), string_proxy_driver_name.begin() + dot);
-
-	mProxyDriverName = new wchar_t[wide_string_proxy_driver_name.length() + 1];
-
-	memcpy(mProxyDriverName, wide_string_proxy_driver_name.c_str(), (wide_string_proxy_driver_name.length() + 1) * sizeof(WCHAR));
-
-	if (!VirtualLock(mProxyDriverName, (wide_string_proxy_driver_name.length() + 1) * sizeof(WCHAR)))
-	{
-		throw exception("Locking proxy driver name buffer failed");
-	}
-}
 
 	
-	        LAZY_IMPORTER_FORCEINLINE size_t module_size_safe(hash_t::value_type h) {
+LAZY_IMPORTER_FORCEINLINE size_t module_size_safe(hash_t::value_type h)
+{
             const auto head = ldr_data_entry();
             auto       it = head;
             while (true) {
