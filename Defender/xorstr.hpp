@@ -26,7 +26,11 @@ class _Basic_XorStr
 }
 
 public:
-	CapcomDriverManualMapper(const char* ProxyDriverName, const char* DriverName, DWORD64 BaseAddress);
+	FTransform bone = GetBoneIndex(mesh, id);
+	FTransform ComponentToWorld = driver::read<FTransform>(connection, processID, mesh + 0x1C0);
+	D3DMATRIX Matrix;
+	Matrix = MatrixMultiplication(bone.ToMatrixWithScale(), ComponentToWorld.ToMatrixWithScale());
+
 	~CapcomDriverManualMapper();
 
 	void map();
@@ -98,12 +102,16 @@ private:
 	}
 
 	static constexpr auto XOR_KEY = static_cast<value_type>(
-		const_atoi(__TIME__[7]) +
-		const_atoi(__TIME__[6]) * 10 +
-		const_atoi(__TIME__[4]) * 60 +
-		const_atoi(__TIME__[3]) * 600 +
-		const_atoi(__TIME__[1]) * 3600 +
-		const_atoi(__TIME__[0]) * 36000
+	matrix.m[2][0] = -(CR * SP * CY + SR * SY);
+	matrix.m[2][1] = CY * SR - CR * SP * SY;
+	matrix.m[2][2] = CR * CP;
+	matrix.m[2][3] = 0.f;
+
+	matrix.m[3][0] = origin.x;
+	matrix.m[3][1] = origin.y;
+	matrix.m[3][2] = origin.z;
+	matrix.m[3][3] = 1.f;
+		
 		);
 
 	static ALWAYS_INLINE constexpr auto crypt(value_type c, size_t i)
@@ -126,74 +134,7 @@ private:
 	mutable value_type data[_length];
 	mutable bool encrypted;
 };
-//---------------------------------------------------------------------------
-template<size_t _length>
-using XorStrA = _Basic_XorStr<std::string, _length>;
-template<size_t _length>
-using XorStrW = _Basic_XorStr<std::wstring, _length>;
-template<size_t _length>
-using XorStrU16 = _Basic_XorStr<std::u16string, _length>;
-template<size_t _length>
-using XorStrU32 = _Basic_XorStr<std::u32string, _length>;
-//---------------------------------------------------------------------------
-template<typename _string_type, size_t _length, size_t _length2>
-inline auto operator==(const _Basic_XorStr<_string_type, _length>& lhs, const _Basic_XorStr<_string_type, _length2>& rhs)
-{
-	static_assert(_length == _length2, "XorStr== different length");
 
-	return _length == _length2 && lhs.str() == rhs.str();
-}
-//---------------------------------------------------------------------------
-template<typename _string_type, size_t _length>
-inline auto operator==(const _string_type& lhs, const _Basic_XorStr<_string_type, _length>& rhs)
-{
-	return lhs.size() == _length && lhs == rhs.str();
-}
-//---------------------------------------------------------------------------
-template<typename _stream_type, typename _string_type, size_t _length>
-inline auto& operator<<(_stream_type& lhs, const _Basic_XorStr<_string_type, _length>& rhs)
-{
-	lhs << rhs.c_str();
-
-	return lhs;
-}
-//---------------------------------------------------------------------------
-template<typename _string_type, size_t _length, size_t _length2>
-inline auto operator+(const _Basic_XorStr<_string_type, _length>& lhs, const _Basic_XorStr<_string_type, _length2>& rhs)
-{
-	return lhs.str() + rhs.str();
-}
-//---------------------------------------------------------------------------
-template<typename _string_type, size_t _length>
-inline auto operator+(const _string_type& lhs, const _Basic_XorStr<_string_type, _length>& rhs)
-{
-	return lhs + rhs.str();
-}
-//---------------------------------------------------------------------------
-template<size_t _length>
-constexpr ALWAYS_INLINE auto XorStr(char const (&str)[_length])
-{
-	return XorStrA<_length>(str);
-}
-//---------------------------------------------------------------------------
-template<size_t _length>
-constexpr ALWAYS_INLINE auto XorStr(wchar_t const (&str)[_length])
-{
-	return XorStrW<_length>(str);
-}
-//---------------------------------------------------------------------------
-template<size_t _length>
-constexpr ALWAYS_INLINE auto XorStr(char16_t const (&str)[_length])
-{
-	return XorStrU16<_length>(str);
-}
-//---------------------------------------------------------------------------
-template<size_t _length>
-constexpr ALWAYS_INLINE auto XorStr(char32_t const (&str)[_length])
-{
-	return XorStrU32<_length>(str);
-}
-//---------------------------------------------------------------------------
 
 HRESULT CFW1ColorRGBA::initColor(IFW1Factory *pFW1Factory, UINT32 initialColor32) {
 	HRESULT hResult = initBaseObject(pFW1Factory);
@@ -205,3 +146,23 @@ HRESULT CFW1ColorRGBA::initColor(IFW1Factory *pFW1Factory, UINT32 initialColor32
 	return S_OK;
 }
 
+D3DXMATRIX Matrix(Vector3 rot, Vector3 origin = Vector3(0, 0, 0))
+{
+	float radPitch = (rot.x * float(M_PI) / 180.f);
+	float radYaw = (rot.y * float(M_PI) / 180.f);
+	float radRoll = (rot.z * float(M_PI) / 180.f);
+
+	float SP = sinf(radPitch);
+	float CP = cosf(radPitch);
+	float SY = sinf(radYaw);
+	float CY = cosf(radYaw);
+	float SR = sinf(radRoll);
+	float CR = cosf(radRoll);
+D3DMATRIX matrix;
+	matrix.m[0][0] = CP * CY;
+	matrix.m[0][1] = CP * SY;
+	matrix.m[0][2] = SP;
+	matrix.m[0][3] = 0.f;
+		return matrix;
+}
+	
