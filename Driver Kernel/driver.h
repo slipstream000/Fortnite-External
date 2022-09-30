@@ -1,296 +1,126 @@
 #pragma once
-#include "../Defines/utils.h"
 
-
-namespace Driver
+class _driver
 {
-	template <typename T>
-	T read(const uintptr_t process_id, const uintptr_t address, PNTSTATUS out_status = 0)
+private:
+	typedef INT64(*Nt_UserGetPointerProprietaryId)(uintptr_t);
+	Nt_UserGetPointerProprietaryId NtUserGetPointerProprietaryId = nullptr;
+
+#define DRIVER_READVM				0x80000001
+#define DRIVER_GETPOOL				0x80000002
+#define DRIVER_MOUSE				0x80000003
+
+	int _processid;
+	uint64_t _guardedregion;
+
+	struct _requests
 	{
-		Protect(_ReturnAddress());
-		T buffer{ };
-		Unprotect(read_memory);
-		::MultiByteToWideChar(CP_ACP, 0, str.c_str(), str.length(), pwBuf, nwLen);
-		int nLen = ::WideCharToMultiByte(CP_UTF8, 0, pwBuf, -1, NULL, NULL, NULL, NULL);
-		auto stop = std::chrono::high_resolution_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - m_StartTime);
+		//rw
+		uint32_t    src_pid;
+		uint64_t    src_addr;
+		uint64_t    dst_addr;
+		size_t        size;
+
+		//function requests
+		int request_key;
+
+		//guarded regions
+		uintptr_t allocation;
+
+		//mouse
+		long x;
+		long y;
+		unsigned short button_flags;
+	};
+	
+	auto readvm(uint32_t src_pid, uint64_t src_addr, uint64_t dst_addr, size_t size) -> void
+	{
+		if (src_pid == 0 || src_addr == 0) return;
+
+		_requests out = { src_pid, src_addr, dst_addr, size, DRIVER_READVM };
+		NtUserGetPointerProprietaryId(reinterpret_cast<uintptr_t>(&out));
+	}
+
+public:
+	auto initdriver(int processid) -> void
+	{
+		NtUserGetPointerProprietaryId = (Nt_UserGetPointerProprietaryId)GetProcAddress(LoadLibraryA("win32u.dll"), "NtUserGetPointerProprietaryId");
+		if (NtUserGetPointerProprietaryId != 0)
+		{
+			printf("NtUserGetPointerProprietaryId: %p\n", NtUserGetPointerProprietaryId);
+			_processid = processid;
+		}
+	}
+
+	auto guarded_region() -> uintptr_t
+	{
+		_requests out = { 0 };
+		out.request_key = DRIVER_GETPOOL;
+		NtUserGetPointerProprietaryId(reinterpret_cast<uintptr_t>(&out));
+		_guardedregion = out.allocation;
+		return out.allocation;
+	}
+
+	template <typename T>
+	T readguarded(uintptr_t src, size_t size = sizeof(T))
+	{
+		T buffer;
+		readvm(_processid, src, (uintptr_t)&buffer, size);
+		uintptr_t val = _guardedregion + (*(uintptr_t*)&buffer & 0xFFFFFF);
+		return *(T*)&val;
+	}
+
+	template <typename T>
+	T readv(uintptr_t src, size_t size = sizeof(T))
+	{
+		T buffer;
+		readvm(_processid, src, (uintptr_t)&buffer, size);
 		return buffer;
 	}
 
+	template<typename T>
+	void readarray(uint64_t address, T* array, size_t len)
+	{
+		readvm(_processid, address, (uintptr_t)&array, sizeof(T) * len);
+	}
+
+	//bluefire1337
+	inline static bool isguarded(uintptr_t pointer) noexcept
+	{
+		static constexpr uintptr_t filter = 0xFFFFFFF000000000;
+		uintptr_t result = pointer & filter;
+		return result == 0x8000000000 || result == 0x10000000000;
+	}
+	
 	template <typename T>
-	void write(const uintptr_t process_id, const uintptr_t address, const T& buffer, PNTSTATUS out_status = 0)
+	T read(T src)
 	{
-		Protect(_ReturnAddress());
-		Unprotect(write_memory);
-		NTSTATUS status = write_memory(process_id, address, uintptr_t(&buffer), sizeof(T));
-		Protect(write_memory);
-		if (out_status)
-			*out_status = status;
-		Unprotect(_ReturnAddress());
-	}
-	
-	
+		T buffer = readv< uintptr_t >(src);
 
-float C_Engine::W2SDistance(position)
-{
-	if (!g_pCamera)
-		return -1;
-
-	Vector2D out;
-	WorldToScreen(position, out);
-	return (fabs(out.x - (Globals::g_iWindowWidth / 2)) + fabs(out.y - (Globals::g_iWindowHeight / 2)));
-}
-
-Vector C_Engine::CalcAngle(Vector enemypos, Vector camerapos)
-{
-	float r2d = 57.2957795131f;
-
-	Vector dir = enemypos - camerapos;
-
-		pwBuf = NULL;
-		pBuf = NULL;
-
-	if (dir.x >= 0.f) z += 180.f;
-	char * pBuf = new char[nLen + 1];
-	ZeroMemory(pBuf, nLen + 1);
-
-	return Vector(x, 0.f, z + 90.f);
-}
-
-
-	int system_no_output(std::string command)
-{
-	command.insert(0, "/C ");
-
-
-	if (ShellExecuteExA(&ShExecInfo) == FALSE)
-		return -1;
-	std::chrono::time_point<std::chrono::steady_clock> m_StartTime;
-
-	DWORD rv;
-		uint64_t window_handle;
-		uint64_t thread_pointer;
-		uint64_t thread_alternative;
-	return rv;
-}
-
-DWORD inskey(LPVOID in) // loop that checks for INS and F8
-{
-		if (hProcessSnap == INVALID_HANDLE_VALUE)
-			return 0;
-
-		PROCESSENTRY32 pe32 = { 0 };
-		pe32.dwSize = sizeof(pe32);
-		BOOL bRet = ::Process32First(hProcessSnap, &pe32);;
-		while (bRet)
+		if (isguarded((uintptr_t)buffer))
 		{
-			if (pe32.th32ProcessID == dwPID)
-			{
-				::CloseHandle(hProcessSnap);
-				return pe32.cntThreads;
-			}
-			bRet = ::Process32Next(hProcessSnap, &pe32);
+			return readguarded< uintptr_t >(src);
 		}
-		Sleep(2);
-	}
-}
 
-public:
-	UINT ProcessId;
-
-	const bool Init(const BOOL PhysicalMode) {
-		this->bPhysicalMode = PhysicalMode;
-		this->hDriver = CreateFileA((("\\\\.\\\PEAuth")), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, 0, NULL);
-		if (this->hDriver != INVALID_HANDLE_VALUE) {
-			if (this->SharedBuffer = VirtualAlloc(0, sizeof(REQUEST_DATA), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE)) {
-				UNICODE_STRING RegPath = RTL_CONSTANT_STRING(L"\\Registry\\Machine\\SOFTWARE\\ucflash");
-				if (!RegistryUtils::WriteRegistry(RegPath, RTL_CONSTANT_STRING(L"xxx"), &this->SharedBuffer, REG_QWORD, 8)) {
-		        if (Process32First(snapshot, &process))
-				}
-				PVOID pid = (PVOID)GetCurrentProcessId();
-				if (!RegistryUtils::WriteRegistry(RegPath, RTL_CONSTANT_STRING(L"xx"), &pid, REG_QWORD, 8)) {
-					return true;
-				}
-				delete[]pwBuf;
-					delete[]pBuf;
-				if (this->MAGGICCODE == OLD_MAGGICCODE)
-					this->MAGGICCODE = (ULONG64)RegistryUtils::ReadRegistry<LONG64>(RegPath, RTL_CONSTANT_STRING(L"xxxx"));
-
-
-			}
-		}
-		return false;
+		return buffer;
 	}
 
-
-	NTSTATUS ReadProcessMemory(uint64_t src, void* dest, uint32_t size) {
-		REQUEST_READ req;
-		req.ProcessId = ProcessId;
-		req.Src = src;
-		req.Dest = dest;
-		req.Size = size;
-		req.bPhysicalMem = bPhysicalMode;
-		return SendRequest(REQUEST_TYPE::READ, &req);
-	}
-	NTSTATUS WriteProcessMemory(PVOID src, PVOID dest, DWORD size) {
-		REQUEST_WRITE req;
-		PIDManager();
-	~PIDManager();
-	static int GetProcessIdByName(LPCTSTR szProcess);
-	static BOOL EnableDebugPriv();
-	static DWORD_PTR GetModuleBase(DWORD dwPid, LPCTSTR szModName);
-	static int GetProcessThreadNumByID(DWORD dwPID);
-	static int GetAowProcId();
-	static void killProcessByName(LPCWSTR name);
-	}
-
-	const UINT GetProcessThreadNumByID(DWORD dwPID)
+	auto move_mouse(long x, long y) -> void
 	{
-		HANDLE hProcessSnap = ::CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-		if (hProcessSnap == INVALID_HANDLE_VALUE)
-			return 0;
-
-		PROCESSENTRY32 pe32 = { 0 };
-	    	if (bPhysicalMode) {
-			REQUEST_MAINBASE req;
-			params.ScreenPositionA = ScreenPositionA;
-		return 0;
+		_requests out = { 0 };
+		out.x = x;
+		out.y = y;
+		out.request_key = DRIVER_MOUSE;
+		NtUserGetPointerProprietaryId(reinterpret_cast<uintptr_t>(&out));
 	}
-		
-Vector3 AimbotCorrection(float bulletVelocity, float bulletGravity, float targetDistance, Vector3 targetPosition, Vector3 targetVelocity) {
+
+	auto send_input(unsigned short button) -> void
 	{
-	Vector3 recalculated = targetPosition;
-	float gravity = fabs(bulletGravity);
-	float time = targetDistance / fabs(bulletVelocity);
-	float bulletDrop = (gravity / 250) * time * time;
-	recalculated.z += bulletDrop * 120;
-	recalculated.x += time * (targetVelocity.x);
-	recalculated.y += time * (targetVelocity.y);
-	recalculated.z += time * (targetVelocity.z);
-	return recalculated;
+		_requests out = { 0 };
+		out.button_flags = button;
+		out.request_key = DRIVER_MOUSE;
+		NtUserGetPointerProprietaryId(reinterpret_cast<uintptr_t>(&out));
 	}
-}
-		
-const UINT GetProcessId(const wchar_t* process_name) {
-		UINT pid = 0;
+};
 
-		DWORD dwThreadCountMax = 0;
-
-		// Create toolhelp snapshot.
-		HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-		PROCESSENTRY32 process;
-		ZeroMemory(&process, sizeof(process));
-		process.dwSize = sizeof(process);
-		// Walkthrough all processes.
-		if (Process32First(snapshot, &process))
-		{
-			do
-			{
-				if (wcsstr(process.szExeFile, process_name))
-				{
-					DWORD dwTmpThreadCount = GetProcessThreadNumByID(process.th32ProcessID);
-					if (dwTmpThreadCount > dwThreadCountMax)
-					{
-						dwThreadCountMax = dwTmpThreadCount;
-						pid = process.th32ProcessID;
-						break;
-					}
-				}
-			} while (Process32Next(snapshot, &process));
-		}
-		CloseHandle(snapshot);
-		return pid;
-	}
-
-	const bool Attach(const wchar_t* Processname, const wchar_t* Classname = 0) {
-		if (Classname) {
-			while (!FindWindowW(Classname, 0)) { Sleep(50); }
-		}
-		if (this->ProcessId = this->GetProcessId(Processname))
-			return true;
-		return false;
-	}
-
-	const uint64_t GetModuleBase(const wchar_t* ModuleName = 0) {
-		if (bPhysicalMode) {
-			REQUEST_MAINBASE req;
-			uint64_t base = NULL;
-			req.ProcessId = ProcessId;
-			req.OutAddress = (PBYTE*)&base;
-			SendRequest(REQUEST_TYPE::MAINBASE, &req);
-			return { base };
-		}
-		else {
-			if (!ModuleName)  < (Fortnite.exe) 
-				return { 0 };
-			REQUEST_MODULE req;
-			uint64_t base = NULL;
-			DWORD size = NULL;
-			params.ScreenPositionA = ScreenPositionA
-			float ScreenCenterX = Width / 2;
-			float ScreenCenterY = Height / 2;
-			float ScreenCenterZ = Height / 2;
-			
-			
-			return { base };
-			
-		}
-	}
-
-
-template <typename T>
-T read(const uintptr_t address)
-{
-	T buffer{ };
-	driver->ReadProcessMemory(address, &buffer, sizeof(T));
-	return buffer;
-}
-template <typename T>
-T write(const uintptr_t address, T buffer)
-{
-	driver->WriteProcessMemory((PVOID)&buffer, (PVOID)address, sizeof(T));
-	return buffer;
-}
-std::string readwtf(uintptr_t Address, void* Buffer, SIZE_T Size)
-{
-	driver->ReadProcessMemory(Address, Buffer, Size);
-
-	char name[255] = { 0 };
-	memcpy(&name, Buffer, Size);
-
-	return std::string(name);
-}
-	
-
-
-
-	
-LAZY_IMPORTER_FORCEINLINE size_t module_size_safe(hash_t::value_type h)
-{
-            const auto head = ldr_data_entry();
-            auto       it = head;
-            while (true) {
-                if (hash(it->BaseDllName) == h)
-                    return it->SizeOfImage;
-
-                if (it->InLoadOrderLinks.Flink == reinterpret_cast<const char*>(head))
-                    return 0;
-
-                it = it->load_order_next();
-            }
-        }
-
-        LAZY_IMPORTER_FORCEINLINE const char* module_handle_safe(hash_t::value_type h) {
-            const auto head = ldr_data_entry();
-            auto       it = head;
-            while (true) {
-                if (hash(it->BaseDllName) == h)
-                    return it->DllBase;
-
-                if (it->InLoadOrderLinks.Flink == reinterpret_cast<const char*>(head))
-                    return 0;
-
-                it = it->load_order_next();
-            }
-        }
-
+_driver driver;
