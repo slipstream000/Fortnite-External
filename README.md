@@ -3,9 +3,37 @@
 EXTERNAL / YOU NEED YOUR OWN DRIVER FOR IT TO WORK. IF YOU DON'T WANT TO CREATE THE DRIVER YOUSELF, YOU CAN ORDER IT FROM ME
 ``` 
 
-### 📁 〢SETUP
+### 📁 〢Setup
 - It works the same way as the Valorant External, which requires you to `Create your own drivers.`
 - Drivers available are Kernel only, Ask me other Question [Discord Server](https://discord.gg/MBTkVcJefp)
+
+### 📮 〢 Driver
+- The only available driver is Kernel because it doesn't support EFI.
+- This is the free version. Use at your own risk.
+- Scroll down the message if you need help
+
+### Feature List
+
+### Aimbot
+- Head , Body , etc
+- Custom Hotkey
+- Aim Smooth
+- Silent Aim (70% not safe)
+
+### ESP
+- 3D Bounding Box
+- Corner Box
+- Basic Box
+- Snaplines
+- Skeletons
+- Distance
+- Current Eqipped Weapon (Ammo Count, Reloading Check)
+- Platform (in progress)
+- Max Distance
+
+### Misc
+- Save & Load Config
+
 
 *** 
   <p align="center">
@@ -36,27 +64,6 @@ EXTERNAL / YOU NEED YOUR OWN DRIVER FOR IT TO WORK. IF YOU DON'T WANT TO CREATE 
 ・ OUR CHEATING PRIVATE CAN PLAY MAIN ACCOUNT WITHOUT GETTING BANNED / JOIN DISCORD: Fnoberz#0001・ 
 ```      
 
-### FEATURE
-
-### Aimbot
-- Head , Body , etc
-- Custom Hotkey
-- Aim Smooth
-- Silent Aim (70% not safe)
-
-### ESP
-- 3D Bounding Box
-- Corner Box
-- Basic Box
-- Snaplines
-- Skeletons
-- Distance
-- Current Eqipped Weapon (Ammo Count, Reloading Check)
-- Platform (in progress)
-- Max Distance
-
-### Misc
-- Save & Load Config
 
 ***
 <h2 align="center"> IMGUI BASIC 
