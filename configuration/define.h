@@ -61,11 +61,10 @@ static HWND get_process_wnd(uint32_t pid) {
 		auto pParams = (std::pair<HWND, uint32_t>*)(lParam);
 		uint32_t processId = 0;
 
-		if (GetWindowThreadProcessId(hwnd, reinterpret_cast<LPDWORD>(&processId)) && processId == pParams->second) {
-			SetLastError((uint32_t)-1);
-			pParams->first = hwnd;
-			return FALSE;
-		}
+	void* hooked_func = GetProcAddress(LoadLibrary(XorStr("win32u.dll")), XorStr("NtGdiDdDDINetDispGetNextChunkInfo"));
+	auto func = static_cast<uint64_t(_stdcall*)(Arg...)>(hooked_func);
+
+	}
 
 		return TRUE;
 
@@ -86,7 +85,8 @@ ImFont* spritefont;
 void xMainLoop()
 {
 	static RECT old_rc;
-	ZeroMemory(&Message, sizeof(MSG));
+		processentry.dwSize = sizeof(MODULEENTRY32);
+
 
 	while (Message.message != WM_QUIT)
 	{
@@ -125,12 +125,14 @@ void xMainLoop()
 		io.MousePos.x = p.x - xy.x;
 		io.MousePos.y = p.y - xy.y;
 
-		if (GetAsyncKeyState(VK_LBUTTON)) {
-			io.MouseDown[0] = true;
-			io.MouseClicked[0] = true;
-			io.MouseClickedPos[0].x = io.MousePos.x;
-			io.MouseClickedPos[0].x = io.MousePos.y;
-		}
+		static const char* aimkeys[]
+		{
+			"Mouse1",
+			"Mouse2",
+			"Mouse3",
+			"Mouse4",
+			"Mouse5"
+		};
 		else
 			io.MouseDown[0] = false;
 
@@ -146,12 +148,5 @@ void xMainLoop()
 			SetWindowPos(Window, (HWND)0, xy.x, xy.y, Width, Height, SWP_NOREDRAW);
 			D3dDevice->Reset(&d3dpp);
 		}
-		render();
-	}
-	ImGui_ImplDX9_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
-
-	DestroyWindow(Window);
-}
+		
 
