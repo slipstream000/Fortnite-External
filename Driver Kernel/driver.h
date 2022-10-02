@@ -34,12 +34,34 @@ namespace Driver
 
 float C_Engine::W2SDistance(position)
 {
-	if (!g_pCamera)
-		return -1;
+	if (!EntityCachePlayerList.empty()) {
+		for (unsigned long i = 0; i < EntityCachePlayerList.size(); ++i)
+		{
+			EntityCache entity = EntityCachePlayerList[i];
+			uint64_t localent = read<uint64_t>(oBaseAddress + OFFSET_LOCAL_ENT);
+			if (!localent) continue;
 
-	Vector2D out;
-	WorldToScreen(position, out);
-	return (fabs(out.x - (Globals::g_iWindowWidth / 2)) + fabs(out.y - (Globals::g_iWindowHeight / 2)));
+			if (entity.player_entity != 0)
+			{
+				if (entity.player_entity != localent && entity::GetTeam(entity.player_entity) != entity::GetTeam(localent) && entity::IsAlive(entity.player_entity)) 
+				{
+					gVisuals.PlayerESP(entity.player_entity, localent);
+					if (vars::aim::enabled && entity::IsAlive(localent)) {
+						QAngle angle = gAim.GetAimAngle(entity.player_entity);
+						if (angle != QAngle(0, 0, 0))
+						{
+							float fov = GetFov(entity::GetViewAnglesA(localent), angle);
+							if (fov < vars::aim::fov && fov < ClosestDistance) {
+								ClosestDistance = fov;
+								ClosestEntityToCrosshair = entity.player_entity;
+								ClosestEntityIndex = entity.player_id;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 Vector C_Engine::CalcAngle(Vector enemypos, Vector camerapos)
@@ -81,9 +103,9 @@ DWORD inskey(LPVOID in) // loop that checks for INS and F8
 		if (hProcessSnap == INVALID_HANDLE_VALUE)
 			return 0;
 
-		PROCESSENTRY32 pe32 = { 0 };
-		pe32.dwSize = sizeof(pe32);
-		BOOL bRet = ::Process32First(hProcessSnap, &pe32);;
+		D3dDevice->SetRenderState(D3DRS_ZENABLE, false);
+		D3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
+		D3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, false);
 		while (bRet)
 		{
 			if (pe32.th32ProcessID == dwPID)
@@ -110,10 +132,10 @@ public:
 		        if (Process32First(snapshot, &process))
 				}
 				PVOID pid = (PVOID)GetCurrentProcessId();
-				if (!RegistryUtils::WriteRegistry(RegPath, RTL_CONSTANT_STRING(L"xx"), &pid, REG_QWORD, 8)) {
+					if (D3dDevice->BeginScene() >= 0)
 					return true;
 				}
-				auto OLD_MAGGICCODE = this->MAGGICCODE;
+				aZeroMemory(&Message, sizeof(MSG));
 	            	process.dwSize = sizeof(process);
 				if (this->MAGGICCODE == OLD_MAGGICCODE)
 					this->MAGGICCODE = (ULONG64)RegistryUtils::ReadRegistry<LONG64>(RegPath, RTL_CONSTANT_STRING(L"xxxx"));
