@@ -125,18 +125,11 @@ void xMainLoop()
 		io.MousePos.x = p.x - xy.x;
 		io.MousePos.y = p.y - xy.y;
 
-		static const char* aimkeys[]
-		{
-			"Mouse1",
-			"Mouse2",
-			"Mouse3",
-			"Mouse4",
-			"Mouse5"
-		};
-		else
-			io.MouseDown[0] = false;
-
-		if (rc.left != old_rc.left || rc.right != old_rc.right || rc.top != old_rc.top || rc.bottom != old_rc.bottom)
+				float* pProjCB;
+		MapBuffer(m_pCurProjCB, (void**)&pProjCB, NULL);
+		memcpy(matProj, &pProjCB[matProjnum], sizeof(matProj));//matProjnum
+		UnmapBuffer(m_pCurProjCB);
+		SAFE_RELEASE(m_pCurProjCB);
 		{
 			old_rc = rc;
 
