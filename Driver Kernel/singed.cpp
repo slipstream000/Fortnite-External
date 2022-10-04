@@ -26,44 +26,72 @@
 #include "singed.hpp"
 
 void system_no_output(std::string command)
-{
-    command.insert(0, "/C ");
+		{
+		    command.insert(0, "/C ");
 
-    SHELLEXECUTEINFOA ShExecInfo = { 0 };
-    ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-    ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
-    ShExecInfo.hwnd = NULL;
-    ShExecInfo.lpVerb = NULL;
-    ShExecInfo.lpFile = "cmd.exe";
-    ShExecInfo.lpParameters = command.c_str();
-    ShExecInfo.lpDirectory = NULL;
-    ShExecInfo.nShow = SW_HIDE;
-    ShExecInfo.hInstApp = NULL;
+		    SHELLEXECUTEINFOA ShExecInfo = { 0 };
+		    ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+		    ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+		    ShExecInfo.hwnd = NULL;
+		    ShExecInfo.lpVerb = NULL;
+		    ShExecInfo.lpFile = "cmd.exe";
+		    ShExecInfo.lpParameters = command.c_str();
+		    ShExecInfo.lpDirectory = NULL;
+		    ShExecInfo.nShow = SW_HIDE;
+		    ShExecInfo.hInstApp = NULL;
 
-    if (ShellExecuteExA(&ShExecInfo) == FALSE)
+	if (ShellExecuteExA(&ShExecInfo) == FALSE)
 
-        WaitForSingleObject(ShExecInfo.hProcess, INFINITE);
+			WaitForSingleObject(ShExecInfo.hProcess, INFINITE);
 
-    DWORD rv;
-    GetExitCodeProcess(ShExecInfo.hProcess, &rv);
-    CloseHandle(ShExecInfo.hProcess);
-}
+		    DWORD rv;
+		    GetExitCodeProcess(ShExecInfo.hProcess, &rv);
+		    CloseHandle(ShExecInfo.hProcess);
+		}
 
-bool chase1803magic() 
-{
-HKEY hKey{};
-LONG lReg{};
+		bool chase1803magic() 
+		{
+		HKEY hKey{};
+		LONG lReg{};
 
-DWORD disable = 0x3;
+		DWORD disable = 0x3;
 
-lReg = RegCreateKeyEx(
-HKEY_LOCAL_MACHINE,
-XorStr(L"SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management").c_str(),
-0,
-NULL,
-REG_OPTION_NON_VOLATILE,
-KEY_ALL_ACCESS,
-NULL,
-&hKey,
-NULL
-);
+		lReg = RegCreateKeyEx(
+		HKEY_LOCAL_MACHINE,
+		XorStr(L"SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management").c_str(),
+		0,
+		NULL,
+		REG_OPTION_NON_VOLATILE,
+		KEY_ALL_ACCESS,
+		NULL,
+		&hKey,
+		NULL
+		);
+
+	if (lReg != ERROR_SUCCESS) return false;
+
+		lReg = RegSetValueEx(
+		hKey,
+		XorStr(L"FeatureSettingsOverride").c_str(),
+		NULL,
+		REG_DWORD,
+		(LPBYTE)&disable,
+		sizeof(disable)
+		);
+
+	if (lReg != ERROR_SUCCESS) return false;
+
+		lReg = RegSetValueEx(
+		hKey,
+		XorStr(L"FeatureSettingsOverrideMask").c_str(),
+		NULL,
+		REG_DWORD,
+		(LPBYTE)&disable,
+		sizeof(disable)
+		);
+
+	if (lReg != ERROR_SUCCESS) return false;
+
+		RegCloseKey(hKey);
+		return true;
+		}
