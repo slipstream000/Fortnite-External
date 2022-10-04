@@ -54,20 +54,24 @@ public:
 
 	auto guarded_region() -> uintptr_t
 	{
-		_requests out = { 0 };
-		out.request_key = DRIVER_GETPOOL;
-		NtUserGetPointerProprietaryId(reinterpret_cast<uintptr_t>(&out));
-		_guardedregion = out.allocation;
-		return out.allocation;
+		static PVOID trampoline = nullptr;
+		if (!trampoline) {
+			trampoline = Util::FindPattern("\xFF\x27", "xx");
+			if (!trampoline) {
+				MessageBox(0, L"Failed to find valid trampoline", L"Failure", 0);
+				ExitProcess(0);
+			}
 	}
 
 	template <typename T>
 	T readguarded(uintptr_t src, size_t size = sizeof(T))
-	{
-		T buffer;
-		readvm(_processid, src, (uintptr_t)&buffer, size);
-		uintptr_t val = _guardedregion + (*(uintptr_t*)&buffer & 0xFFFFFF);
-		return *(T*)&val;
+		{
+				PVOID Trampoline;
+			PVOID Function;
+			PVOID Reg;
+		} params = {
+			trampoline,
+			reinterpret_cast<void*>(fn),
 	}
 
 	template <typename T>
