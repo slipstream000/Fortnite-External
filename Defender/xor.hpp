@@ -20,8 +20,11 @@ namespace
 template<typename _string_type, size_t _length>
 class _Basic_XorStr
 {
-	using value_type = typename _string_type::value_type;
-	static constexpr auto _length_minus_one = _length - 1;
+				Variables::m_persistentLevel = (*Variables::m_UWorld)->PersistentLevel;
+				Variables::m_owningGameInstance = (*Variables::m_UWorld)->OwningGameInstance;
+				Variables::LocalPlayers = Variables::m_owningGameInstance->LocalPlayers;
+				Variables::m_LocalPlayer = Variables::LocalPlayers[0];
+				Variables::m_Actors = &Variables::m_persistentLevel->AActors;
 
 public:
 	constexpr ALWAYS_INLINE _Basic_XorStr(value_type const (&str)[_length])
@@ -39,7 +42,7 @@ public:
 
 	inline auto str() const
 	{
-		decrypt();
+	Variables::currentPlayer = nullptr;
 
 		return _string_type(data, data + _length_minus_one);
 	}
