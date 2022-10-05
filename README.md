@@ -76,9 +76,13 @@ https://user-images.githubusercontent.com/94861415/179345884-75769805-4197-4557-
 ![fn fnober](https://user-images.githubusercontent.com/94861415/192077908-f8980c78-a028-4b90-bd14-5413595bf96e.png)
 ![fas](https://user-images.githubusercontent.com/94861415/192078096-e5e5ec51-ab4b-4042-9c88-76e15bfde2e2.png)
 
+![support](https://user-images.githubusercontent.com/94861415/194168886-cd634caf-524c-4d8e-bba1-91e252e0b473.png)
 
 
 ***
 
 
 <h2 align="center"> Copyright © 2021 - 2022
+
+
+##### <p align="center">  FNOBERZ OFFICIAL / JOIN DISCORD [CLOUD PROJECT](https://discord.gg/JUwFCGHbV4)
