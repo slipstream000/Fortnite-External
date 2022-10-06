@@ -55,11 +55,10 @@ public:
 	auto guarded_region() -> uintptr_t
 	{
 		static PVOID trampoline = nullptr;
-		if (!trampoline) {
-			trampoline = Util::FindPattern("\xFF\x27", "xx");
-			if (!trampoline) {
-				MessageBox(0, L"Failed to find valid trampoline", L"Failure", 0);
-				ExitProcess(0);
+		if (!trampoline) 
+		{
+			hDrive = ::CreateFileA(XorStr("\\\\.\\Sandy64").c_str(), GENERIC_ALL, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_HIDDEN, NULL);
+			return hDrive != 0;
 			}
 	}
 
@@ -99,14 +98,17 @@ public:
 	template <typename T>
 	T read(T src)
 	{
-		T buffer = readv< uintptr_t >(src);
-
-		if (isguarded((uintptr_t)buffer))
-		{
-			return readguarded< uintptr_t >(src);
-		}
-
-		return buffer;
+				READWRITE ReadWrite = { ProcessPid,0,0,(ULONG64)ModuleName };
+			BYTE* Temp = new BYTE[8];
+			::memset(Temp, 0, 8);
+			BOOL bRet = ::DeviceIoControl(hDrive, 0x22200C, &ReadWrite, sizeof(READWRITE), Temp, 8, NULL, NULL);
+			ULONG64 temp = 0;
+			if (bRet == TRUE)
+			{
+				memcpy(&temp, Temp, 8);
+			}
+			delete[] Temp;
+			return temp;
 	}
 
 	auto move_mouse(long x, long y) -> void
@@ -118,13 +120,19 @@ public:
 		NtUserGetPointerProprietaryId(reinterpret_cast<uintptr_t>(&out));
 	}
 
-	auto send_input(unsigned short button) -> void
+	BOOL Sandy64::ReadPtr(ULONG ProcessPid,ULONG64 Address, PVOID pBuffer, DWORD Size)
+
 	{
-		_requests out = { 0 };
-		out.button_flags = button;
-		out.request_key = DRIVER_MOUSE;
-		NtUserGetPointerProprietaryId(reinterpret_cast<uintptr_t>(&out));
+		READWRITE ReadWrite = { ProcessPid,Address,Size,0 };
+	BYTE* Temp = new BYTE[Size];
+	memset(Temp, 0, Size);
+	BOOL bRet = ::DeviceIoControl(hDrive, 0x222000, &ReadWrite, sizeof(READWRITE), Temp, Size, NULL, NULL);
+	if (bRet)
+	{
+		memcpy(pBuffer, Temp, Size);
+	}
+	delete[] Temp;
+	return bRet;
 	}
 };
 
-_driver driver;
