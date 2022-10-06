@@ -7,7 +7,6 @@
 #include <mutex>
 #include <TlHelp32.h>
 #include <d3d9.h>
-#include <dwmapi.h>
 #include <xmmintrin.h>
 
 #pragma comment(lib, "ntdll.lib")
@@ -214,4 +213,82 @@ namespace RegistryUtils
 
 		return Success;
 	}
+}
+
+
+//d3d11 w2s for ut4 engine games by n7
+
+//==========================================================================================================================
+
+//globals
+
+DWORD Daimkey = VK_RBUTTON;		//aimkey
+int aimheight = 46;				//aim height value
+unsigned int asdelay = 90;		//use x-999 (shoot for xx millisecs, looks more legit)
+bool IsPressed = false;			//
+DWORD astime = timeGetTime();	//autoshoot timer
+
+//init only once
+bool firstTime = true;
+
+//viewport
+UINT vps = 1;
+D3D11_VIEWPORT viewport;
+float ScreenCenterX;
+float ScreenCenterY;
+
+//vertex
+ID3D11Buffer *veBuffer;
+UINT Stride = 24;
+UINT veBufferOffset = 0;
+D3D11_BUFFER_DESC vedesc;
+
+//index
+ID3D11Buffer *inBuffer;
+DXGI_FORMAT inFormat;
+UINT        inOffset;
+D3D11_BUFFER_DESC indesc;
+
+//rendertarget
+ID3D11Texture2D* RenderTargetTexture;
+ID3D11RenderTargetView* RenderTargetView = NULL;
+
+//shader
+ID3D11PixelShader* psRed = NULL;
+ID3D11PixelShader* psGreen = NULL;
+
+//pssetshaderresources
+UINT pssrStartSlot;
+D3D11_SHADER_RESOURCE_VIEW_DESC  Descr;
+ID3D11ShaderResourceView* ShaderResourceView;
+D3D11_TEXTURE2D_DESC texdesc;
+
+//psgetConstantbuffers
+ID3D11Buffer *pcsBuffer;
+D3D11_BUFFER_DESC pscdesc;
+UINT pscStartSlot;
+
+//vsgetconstantbuffers
+ID3D11Buffer *mConstantBuffers;
+UINT vsConstant_StartSlot;
+
+UINT psStartSlot;
+UINT vsStartSlot;
+
+
+
+//==========================================================================================================================
+
+//wh
+char *state;
+ID3D11RasterizerState * rwState;
+ID3D11RasterizerState * rsState;
+
+
+
+ID3D11DepthStencilState* myDepthStencilStates[static_cast<int>(eDepthState::_DEPTH_COUNT)];
+
+void SetDepthStencilState(eDepthState aState)
+{
+	pContext->OMSetDepthStencilState(myDepthStencilStates[aState], 1);
 }
