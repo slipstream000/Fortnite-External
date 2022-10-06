@@ -7,7 +7,6 @@
 #include <mutex>
 #include <TlHelp32.h>
 #include <d3d9.h>
-#include <dwmapi.h>
 #include <xmmintrin.h>
 
 #pragma comment(lib, "ntdll.lib")
