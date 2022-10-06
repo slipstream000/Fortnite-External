@@ -62,8 +62,6 @@ A website that I created to introduce myself from start to finish. hope you like
 
 ---
 
-
-***
 <h2 align="center"> IMGUI BASIC 
 
 ***
