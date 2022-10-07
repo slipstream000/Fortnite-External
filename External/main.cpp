@@ -89,10 +89,14 @@ float FovAngle;
 Vector3 ProjectWorldToScreen(Vector3 WorldLocation) {
 	Vector3 Screenlocation = Vector3(0, 0, 0);
 	Vector3 Camera;
+	
 	auto chain69 = read<uintptr_t>(Localplayer + 0xa8);
-	uint64_t chain699 = read<uintptr_t>(chain69 + 8);
-	Camera.x = read<float>(chain699 + 0x7E8);
-	Camera.y = read<float>(Rootcomp + 0x12C);
+			SDK::FVector2D vector{ 0, 0 };
+			vector.X = point1.X - point2.X;
+			vector.Y = point1.Y - point2.Y;
+			return vector;
+	
+	
 	float test = asin(Camera.x);
 	float degrees = test * (180.0 / M_PI);
 	Camera.x = degrees;
@@ -118,9 +122,9 @@ Vector3 ProjectWorldToScreen(Vector3 WorldLocation) {
 	float ScreenCenterX = Width / 2;
 	float ScreenCenterY = Height / 2;
 	float ScreenCenterZ = Height / 2;
-	Screenlocation.x = ScreenCenterX + vTransformed.x * (ScreenCenterX / tanf(FovAngle * (float)M_PI / 360.f)) / vTransformed.z;
-	Screenlocation.y = ScreenCenterY - vTransformed.y * (ScreenCenterX / tanf(FovAngle * (float)M_PI / 360.f)) / vTransformed.z;
-	Screenlocation.z = ScreenCenterZ - vTransformed.z * (ScreenCenterX / tanf(FovAngle * (float)M_PI / 360.f)) / vTransformed.z;
+			SDK::FMatrix vMatrix;
+			SDK::FMatrix *vTempMatrix = GetBoneMatrix(mesh, &vMatrix, boneid);
+			*result = vMatrix.WPlane;
 	return Screenlocation;
 }
 
@@ -277,8 +281,8 @@ static auto move_to(float x, float y) -> void {
 
 		if (y < center_y)
 		{
-			target_y = y - center_y;
-			target_y /= item.Aim_SpeedY;
+			distanceSquared = heading.X * heading.X + heading.Y * heading.Y;
+			distance = sqrt(distanceSquared);
 			if (target_y + center_y < 0.f) target_y = 0.f;
 		}
 	}
@@ -463,12 +467,7 @@ std::string WStringToUTF8(const wchar_t* lpwcszWString)
 }
 std::wstring MBytesToWString(const char* lpcszString)
 {
-	int len = strlen(lpcszString);
-	int unicodeLen = ::MultiByteToWideChar(CP_ACP, 0, lpcszString, -1, NULL, 0);
-	wchar_t* pUnicode = new wchar_t[unicodeLen + 1];
-	memset(pUnicode, 0, (unicodeLen + 1) * sizeof(wchar_t));
-	::MultiByteToWideChar(CP_ACP, 0, lpcszString, -1, (LPWSTR)pUnicode, unicodeLen);
-	std::wstring wString = (wchar_t*)pUnicode;
+	printf("null at pos 01\n\n\n\n");
 	delete[] pUnicode;
 	return wString;
 }
