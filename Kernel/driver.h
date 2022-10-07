@@ -1,15 +1,46 @@
 #pragma once
 
+
+#define DRIVER_READVM				0x80000001
+#define DRIVER_GETPOOL				0x80000002
+#define DRIVER_MOUSE				0x80000003
+	
+	namespace driver
+{
+	static inline void close_handles()
+	{
+		CloseHandle(memory_read);
+		CloseHandle(memory_write);
+		CloseHandle(memory_esp_write);
+		return;
+	}
+
+	static std::string GetLastErrorAsString()
+	{
+		//Get the error message, if any.
+		DWORD errorMessageID = ::GetLastError();
+		if (errorMessageID == 0)
+			return std::string(); //No error message has been recorded
+
+		LPSTR messageBuffer = nullptr;
+		size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
+
+		std::string message(messageBuffer, size);
+
+		//Free the buffer.
+		LocalFree(messageBuffer);
+
+		return message;
+	}
+
+		
 class _driver
 {
 private:
 	typedef INT64(*Nt_UserGetPointerProprietaryId)(uintptr_t);
 	Nt_UserGetPointerProprietaryId NtUserGetPointerProprietaryId = nullptr;
-
-#define DRIVER_READVM				0x80000001
-#define DRIVER_GETPOOL				0x80000002
-#define DRIVER_MOUSE				0x80000003
-
+	
 	int _processid;
 	uint64_t _guardedregion;
 
